@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<books xmlns="http://www.example.org/books_1_0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.example.org/books_1_0 books_1_0.xsd ">
+	<!-- 注释 -->
+	<book id="1">
+		<isbn>692587494152</isbn>
+		<name>蛙</name>
+		<author>莫言</author>
+		<bookinfo>
+			<prices>24.5</prices>
+			<pages>385</pages>
+			<publish_house>人文出版社</publish_house>
+			<publish_date>2005-11-21</publish_date>
+		</bookinfo>
+	</book>
+	<book id="1">
+		<isbn>692587494152</isbn>
+		<name>蛙</name>
+		<author>莫言</author>
+		<bookinfo>
+			<prices>24.5</prices>
+			<pages>385</pages>
+			<publish_house>人文出版社</publish_house>
+			<publish_date>2005-11-21</publish_date>
+		</bookinfo>
+	</book>
+</books>

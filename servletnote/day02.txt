@@ -1,0 +1,53 @@
+Servlet的生命周期(一定要记住)
+    1,初始化servlet实例,init方法
+    2,进行业务逻辑处理 service方法
+    3,销毁实例 destroy方法
+
+同一用户下怎么去做数据的共享
+1,Cookie(小甜饼) ,
+    保存在客户端的机器上的一个空间
+    a,保存客户的一些信息
+    b,记录用户的访问喜好
+    c,网站的个性化,定制一些服务内容
+
+   创建一个Cookie Cookie coo = new Cookie("","");
+   coo.serMaxAge(xx);//设置生命时间
+   res.addCookie(coo); //把Cookie添加到客户端
+
+   url地址传参  url?name=value&password=password
+
+2,Session()
+ 当用户访问网站的时候,服务器会在内存里面为该浏览器
+ 用户分配一个空间,被这个浏览器独用,它的默认生命时间
+ 时间是30分钟
+//设置session的生命时间
+setMaxInactiveInterval(int interval) 
+//给session赋值
+setAttribute(java.lang.String name, java.lang.Object value) 
+//通过名字取session里的值
+getAttribute(java.lang.String name) 
+//取道session的生命时间
+getMaxInactiveInterval() 
+通过名字删除session
+removeAttribute(java.lang.String name) 
+getId()
+
+//创建一个seesion
+HttpSession hs = req.getSession();
+hs.setAttribute("username", username);
+hs.setAttribute("password", password);
+//设置session生命时间
+hs.setMaxInactiveInterval(60*60*24);
+//从session取值
+String username = (String)hs.getAttribute("username");
+String password = (String)hs.getAttribute("password");
+
+         Cookie         session
+存放位置:客户端         服务端
+安全性:  较差            较好
+
+3,隐藏域 hidden
+
+
+
+

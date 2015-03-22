@@ -1,0 +1,156 @@
+Servlet
+
+1,CGI --common gateway interface
+
+2,ASP --
+	
+3,PHP --
+	http://www.php.net
+
+	PHP + mysql + Linux + apache
+
+4,JSP = HTML + java小片段 + JS
+
+	jsp运行环境要求较高,jsp的class文件常驻内存
+
+	运行效率高,但是要占很大的内存
+
+C/S 模式:
+
+B/S 模式
+
+
+HTTP:超文本传输协议
+
+HTTP1.0  --HTTP1.1
+1.0 版本 单发 
+1.1 可以多发
+
+Servlet :
+	
+	运行在服务器端的java小程序,applet运行在
+	客户端的java小程序
+
+Tomcat:
+	http://apache.jakarta.org
+	完全开放源代码的web服务器
+	安装与配置:
+	     环境变量的配置:
+	        1,JAVA_HOME=指向JDK的安装目录
+		2,startup.bat 打开
+		在第二行配置 set JAVA_HOME=指向JDK目录
+		 注意:JAVA_HOME=D:/apachexxxx
+
+		 @echo off
+		set JAVA_HOME=D:\Java\jdk1.6.0_32
+
+1,bin文件夹:存放的一些可执行文件,如:打开关闭tomcat
+2,conf文件夹:
+	a,server.xml 配置端口号 和 虚拟路径 设置编码方式
+	b,tomcat-user.xml:配置tomcat用户,下面是管理员用户的配置
+		<tomcat-users>
+		<role rolename="manager"/>
+		<user username="admin" password="admin" roles="manager"/>
+		</tomcat-users>
+	
+	c,web.xml:tomcat的信息
+
+ 3,lib文件夹:存放支持tomcat的jar包和支持web工程的jar包
+ 4,logs文件夹:存放tomcat运行的日志信息
+ 5,temp文件夹:存放一些临时文件信息
+ 6,webapps:存放我们的web工程
+ 7,work文件夹:存放jsp在运行中生成的Servlet JAVA文件的
+
+ http://localhost:9000/
+ http:告诉我们用的协议用的是HTTP协议
+ localhost:代表是我们的本机 127.0.0.1也是代表我们的本机 
+	    也可以是Tomcat所安装机器的IP地址
+ 9000 :端口号
+ 
+
+ web工程:
+     web工程名字
+	WEB-INF-->下面的所有的东西 是外部访问不了的
+	    classes -->存放.class文件
+	    lib -->web工程需要的jar包
+	    web.xml --->对我们的web工程进行配置的信息
+
+ 
+ Tomcat虚拟路径的配置:
+   1,<Context path="/pp" docBase="E:\myWebSite" reloadable="true" />
+       path:-->web站点的一个别名
+       docBase:指向你的web站点所在路径
+       reloadable:在class文件改变时,自动加载 
+   2,创建一个xml文件,里面配置
+   <Context docBase="E:\myWebSite" reloadable="true" />
+	docBase:-->你的web站点的路径
+	访问时web站点的名称就是你的xml文件名称
+
+  Servlet:
+	1,由web服务器调用执行
+	2,编写servlet符合servlet规范(规定)
+	3,Java语言
+	4,学习JSP的基础
+	5.功能很强大
+
+	开发工具:
+		文本编辑器 
+		集成开发环境:
+		myEclipse,eclipse,Jbuilder netBean
+
+	运行环境:
+		Tomcat  apache组织的(免费)
+		webLogic BEA公司的 (商业的)
+		webSphere MS (商业的)
+		JBOSS      开源的(免费的)
+		resin      商业的
+		glassfish   免费的
+	
+	Tomcat :
+		web容器
+		jsp容器
+		servlet容器
+	
+
+servlet开发三种方式:
+	1,实现servlet接口
+	2,继承GenericServlet类
+	3,继承HttpServlet类
+
+public void init(ServletConfig arg0)
+  servlet初始化的方法,类似于我们类的构造函数
+  只有在第一次被调用
+
+public void service(ServletRequest arg0, ServletResponse arg1)
+处理我们业务逻辑的方法,所有的业务处理都在这个
+方法里处理,
+ServletRequest:用于获得客户端的信息
+ServletResponse:用于向客户端返回信息
+
+public void destroy()
+销毁servlet实例,释放内存
+1,reload 重新加载我们的web站点
+2,关闭tomcat
+3,关机和断电
+
+开发servlet的流程
+
+1,继承servlet接口,继承GenericServlet类,继承HttpServlet类
+2,写我们的业务逻辑代码
+3,配置我们的servlet类
+4,发布我们的工程
+5,访问我们的站点
+
+
+HttpServlet 
+   doGet(req,res)
+   接收form表单里get方法提交的数据
+   doPost(req,res)
+   接收form表单里post方法提交的数据
+
+http://localhost:9000/ServletDemo/qq
+协议     主机名  端口  web站点名  资源名
+
+
+
+

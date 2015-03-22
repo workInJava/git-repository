@@ -1,0 +1,61 @@
+
+
+设计一个员工类(Emp) ,有一个计算工资的抽象方法如下:
+
+public abstract double calcSalary();
+
+设计如下子类:
+1. Boss 类, 拿固定薪资, 每月为50000元.
+
+2. 小时工类(HourEmp), 按每小时15元收费,
+每月工资为当月的工作小时数*每小时费用.
+
+3. 全职员工(FullTimeEmp), 
+每月基本工资是 3000元,提成方式如下: 
+基本提成率是 10% (以基本工资为基础)
+	 如果当月超额完成任务的 30%,则按1.5倍下发提成.
+	 如果当月超额完成任务的 50%,则按2倍下发提成.
+	 如果当月超额完成任务的 80%,则按3倍下发提成.
+	 
+以上每个子类的属性请自己根据业务来设计. 
+但并需要重写父类的 calcSalary方法
+
+最后,写一个TestEmp类,创建各个具体的员工对象,
+并调用calcSalary方法,得到每个员工的工资,并打印出来.
+
+--
+
+
+作业二:
+制订接口玩家 Player
+如下:
+public interface Player{
+	String BU = "布";		//布
+	String JIANDAO = "剪刀";	//剪刀
+	String SHITOU = "石头";	//石头
+
+	String getName(); //得以参与者的姓名
+	String show(); //决定出什么手势, 返回本接口的三个常量之一
+}
+请写不同的玩家实现类,实现自己的show方法(也就是决定出什么). 这个算法由自己定.
+
+设计类如下,请填写方法的实现即可:
+public class Matcher{
+	/******
+	 *本方法完成的业务是:
+	 * 模拟两个玩家互相猜拳, 调有show方法分别获取玩家的出拳,决定谁负谁赢.
+	 */
+	public static void match(Player p1, Player p2){
+		//请自行实现
+		...
+	}
+}
+
+//调用者:
+public class RunMatcher({
+	public static void main(String[] args){
+		...
+		Matcher.match(p1,p2);
+	}
+}
+

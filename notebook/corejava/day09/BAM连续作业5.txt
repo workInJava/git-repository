@@ -1,0 +1,10 @@
+练习7:(Exception)
+为BAM添加几个异常类
+
+BalanceNotEnoughException :用于取钱的时候余额不足的情况(包括账户余额超过透支额的情况)
+RegisterException:用于开户异常的情况,例如密码两次输入不一致等情况
+LoginException:用户登录异常的情况,例如id错误,密码错误
+LoanException:贷款额不能为负数,如果用户试图将贷款额置为负数,则会抛出这个异常
+
+以上四个异常类有一个共同的父类 BusinessException
+并妥善的处理这些异常

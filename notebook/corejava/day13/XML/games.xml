@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE games SYSTEM "games_0_1.dtd" >
+<games>
+   <game id="1">
+	<name>传奇</name>
+	<type>多人在线游戏</type>
+	<mode>按点卡收费</mode>
+	<detail>
+	    <year>2000</year>
+	    <company>盛大</company>
+	</detail>
+   </game>
+   <game id="2">
+	<name>星际争霸I</name>
+   	<type>竞技</type>
+	<mode>免费</mode>
+   </game>
+</games>

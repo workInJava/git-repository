@@ -1,0 +1,48 @@
+作业一：
+请根据之前写好的扑克牌花色(Suit) 的枚举:
+HEARTS, SPADES, DIAMONDS, CLUBS
+
+和 扑克牌点数(Rank)的枚举
+ACE,DUECE,TRHEE,FOUR,FIVE,....
+JACK, QUEEN, KING
+来完成以下要求：
+
+1.写一个卡片类Card, 含两个属性，
+	一个花色，一个是点数.
+
+2.再写个扑克牌类，要用集合来存放所有卡片。
+  并完成以下功能：
+  a.初始化一副扑克牌 [静态代码块]
+  b.获取一副扑克牌的方法
+  c.洗牌 方法
+  d.发牌 方法
+    要求：传入2个参数，第一个参数：扑克牌，第二个参数：发多少张牌。
+
+
+作业二:  [省]
+class Purcase{ //购买类
+	private String brand; //品牌
+	private String name; //产品名
+	private double cost; // 费用
+}
+
+有集合map存放了如下数据:
+List list = new ArrayList();
+Purcase p1 = new Purcase("宝洁","洗手粉",18.5);
+Purcase p2 = new Purcase("联合利华","肥皂",4.5);
+Purcase p3 = new Purcase("宝洁","牙膏",32.5);
+Purcase p4 = new Purcase("宝洁","毛巾",14.5);
+Purcase p5 = new Purcase("洁利","洗面奶",26.0);
+Purcase p6 = new Purcase("好迪","洗发水",27.5);
+Purcase p7 = new Purcase("多芬","沐浴露",38.5);
+Purcase p8 = new Purcase("宝洁","洗洁精",3.4);
+
+list.add(p1);
+list.add(p2);
+....
+
+要求:写一个程序,打印出各品牌所花费的总费用.
+[可选,排好序后再打印输出,按花费总费用的降序排序]
+
+
+

@@ -1,0 +1,211 @@
+方法调用时参数传递的方式：
+1.值传递 【传值】
+  如果方法的参数是基本类型的话，则采用值传递。
+  传的是值本身。
+
+2.引用(地址)传递 【传地址】
+  如果方法的参数是对象类型的话，则采用引用传递。
+  传的是地址。
+
+发生方法调用时，JVM会把实参的值copy一份给到形参。
+这个值到底是值本身(value)，还是引用(references)
+由形参的数据类型决定。
+
+--
+例：
+public void swap(int a, int b){
+   int temp = a;
+   a = b;
+   b = temp;
+}
+//假设数组a与数组b的长度是一样的。
+public void swap(int[] a, int[] b){
+   for(int i=0;i<a.length;i++){
+	int temp = a[i];
+	a[i] = b[i];
+	b[i] = temp;
+   }
+}
+
+//调用者：
+public static void main(String[] args){
+    int i = 100;
+    int j = 200;
+    xxx.swap(i,j);
+    System.out.println("i="+i+",j="+j);
+    //--------------
+    int[] arr1 = {1,23,34,9,16};
+    int[] arr2 = {99,101,35,67,5};
+    xxx.swap(arr1,arr2);
+    //请问：
+    System.out.println(Arrays.toString(arr1));
+    System.out.println(Arrays.toString(arr2));
+}
+
+--
+方法的重载(overload)
+是指在一个类中，方法名相同，参数列表不同的多个
+方法之间构成的关系。
+
+所以，方法重载的条件：
+1.在同一个类中。【前提】
+2.方法名要相同，但参数列表不同
+
+参数列表不同具体体现在：
+  a. 个数不同
+  b. 类型不同
+  c. 类型不同时，顺序不同。
+
+如：
+public void swap(int a, int b){}
+public void swap(int[] a, int[] b){}
+
+public void print(String a,int b){}
+public void print(int b, String a){}
+
+public int add(int a, int b){}
+public inoublet add(int b, int a){} //error,不构成重载
+public double add(double a, double b){}
+
+--
+二维数组
+定义：二维数组的每个元素都是一维数组。
+语法：
+数据类型[][] 数组名 = new 数据类型[rows][cols];
+注：
+在初始化二维数组时，rows必需要指定，而cols可以
+不指定。
+
+如：创建一个5行3列的整型二维数组
+int[][] arr = new int[5][3];
+
+再创建一个6行，但不确定列的整型二维数组
+int[][] arr2 = new int[6][]; //
+//初始化每一个二维数组的元素
+for(int i=0;i<arr2.length;i++){
+   arr2[i] = new int[i+1];
+}
+
+--
+二维数组直接赋值语法：
+int[][] arr = {
+	{0,0},{0,0,0,0},{0},{0,0,0}
+};
+
+--
+练习：
+设计一个程序，可以随机地报出本班级中某位学员的
+姓名，以及相应的处罚。比如：唱歌、俯卧撑、跳舞、
+...
+
+要定义一个字符串型数组，存放姓名. 【一维】
+再定义一字符串型数组，存放处罚信息 【一维】
+
+然后，根据随机数，来随机抽取某个学员，也随机抽
+象某个处罚。
+为了增是可视化效果，利用 
+try {
+  Thread.sleep(50);
+} catch (Exception e){
+  e.printStackTrace();
+}
+
+注：
+1.需要注意何时中断循环。
+2.打印时使用 \r 而不是 \n
+
+--
+JAVA基础语法回顾：
+1.JAVA语言不同的版本
+2.JDK环境的配置
+3.编写类的结构
+  1.包 的定义
+  2.导入语句
+  3.类的定义
+
+//part1
+package xxx.xxx.xxx;
+//part2
+import xxxx.xxx.xx;
+...
+//part3
+public class 类名{
+   //程序的入口
+   public static void main(String[] args){
+	
+   }
+}
+
+4.标识符
+5.数据类型
+6.变量、常量、字面量
+7.操作符/运算符
+8.表达式
+
+--
+9.分支语句 switch case
+10.条件判断 if else
+11.for循环
+12.while循环
+13.do while循环
+14. continue与break 语句
+
+--
+15.JRE内置类库
+   java.lang.System
+   java.lang.String
+   java.lang.Integer
+   java.lang.Math
+   java.lang.Thread
+
+   java.util.Scanner
+   java.util.Random
+   java.util.Arrays
+   java.util.Date
+   java.util.Calendar
+
+   ...
+--
+16. 方法(method)
+语法：
+饰符 返回类型 方法名([参数列表])[抛出的异常]{
+   //代码块
+}
+
+17.方法的重载(overload)
+  1.同一个类中
+  2.方法名相同，参数列表不同
+
+--
+18.数组
+   一维数组
+   二维数组
+--
+19. JAVA内存结构
+    栈区 stack area
+    堆区 heap area
+    永久区 permanent area
+    
+20. 垃圾回收机制 GC
+
+--
+21. 对象与引用
+
+---
+练习：
+1.定义一个int型的一维数组，包含10个元素，分别赋一些随机整数，然后求出所有元素
+    的最大值，最小值，平均值，和值，并输出出来。
+2.定义一个int型的一维数组，包含10个元素，分别赋值为1~10， 然后将数组中的元素
+   都向前移一个位置，即，a[0]=a[1],a[1]=a[2],…最后一个元素的值是原来第一个元素
+   的值，然后输出这个数组。
+3. 定义一个int型的一维数组，包含40个元素，用来存储每个学员的成绩，循环产生40个
+    0~100之间的随机整数，将它们存储到一维数组中，然后统计成绩低于平均分的学员的
+    人数，并输出出来。
+4. （选做）承上题，将这40个成绩按照从高到低的顺序输出出来。
+5,（选做）编写程序，将一个数组中的元素倒排过来。例如原数组为1，2，3，4，5；
+    则倒排后数组中的值为5，4，3，2，1。
+
+
+
+
+

@@ -1,0 +1,269 @@
+三大常用对象类型
+1.字符串
+java.lang.CharSequence [接口]
+  java.lang.String
+  java.lang.StringBuilder
+  java.lang.StringBuffer
+
+2.数字
+java.lang.Number
+	java.lang.Integer
+	java.lang.Byte
+	java.lang.Short
+	java.lang.Long
+	java.lang.Float
+	java.lang.Double
+	java.math.BigInteger
+	java.math.BigDecimal
+java.lang.Math 工具类
+java.text.NumberFormat 格式化类
+
+3.日期
+API:
+java.util.Date
+	\- java.sql.Date
+
+java.util.Calendar  [日历类]
+	\- GregorianCalendar  
+
+java.util.TimeZone 时区类
+	\- SimeTimeZone  具体子类
+
+java.text.DateFormat  [日期格式器]
+	\- SimeDataFormat 
+
+--
+日期与字符串之间的转换
+String str = "1990-12-15";
+java.sql.Date d1 = java.sql.Date.valueOf(str);
+
+//
+String str2 = "1989/02/18";
+//要想把上面的字符串转换成日期，先创建格式器
+SimpleDateFormat sdf = 
+	new SimpleDateFormat("yyyy/MM/dd");
+java.util.Date d2 = sdf.parse(str2);
+
+//反过来，把日期格式化成字符串
+Date d3 = new Date();
+SimpleDateFormat sdf2 = 
+	new SimpleDateFormat("yyyy,MM,dd hh:mm:ss");
+String str3 = sdf.format(d3);
+
+--
+常用的日期格式化字符有：
+y 代表年份
+M 代表月份
+d 代表月日
+H 代表小时，24小时制
+h 代表小时，12小时制
+m 代表分钟
+s 代表秒钟
+z 代表时区
+..
+
+--
+字符处理-正则表达式
+1.字符串的常见方法
+java.lang.String
+特点：
+  a. 不可变类
+  b. final类，不能被继承
+
+正是基于以上2点,JVM对字符串做了特殊的处理，使用
+了“串池”的技术。
+
+--
+构造方法
+public String(char[] val);
+public String(byte[] val); //解码的过程,默认字符集
+public String(byte[] val,int offset,int len);
+
+//指定字符串的编码
+public String(byte[] val,String charSet);
+public String(byte[] val,int offset,int len,String charset);
+
+业务方法：
+getBytes(); //采用默认的字符集编码
+getBytes(String charset); //指定字符集编码
+
+charAt(int idx);
+length();
+substring(int begin); 求子串
+substring(int begin,int end);
+indexOf(String str); //求str中字符串中出现的位置
+indexOf(String str,int fromIndex);
+lastIndexOf(String str);
+startsWith(String start);
+endsWith(String end);
+isEmpty();
+replace(char old, char _new);
+replace(CharSequence old,CharSequence _new);
+trim(); //截掉前后空白字符
+valueOf 方法.
+
+split(String pattern); 
+split(String pattern,int limit);
+
+--
+解码(decode)：就是把字节转换成字符串的过程
+编码(encode):就是把字符串转换成字节数组的过程
+编解码需要有对应的“码表”，也叫字符集。
+常见的字符集有：
+ASCII 采用单字节编码。
+GBK   采用双字节编码，也是国标，向上兼容ASCII
+GB2312 是GBK的上一个版本，现在使用不多。
+ISO-8859-1 西欧字符集
+BIG5  繁体中文
+UTF-8 国际编码 [支持中文]
+
+--
+正则表达式
+定义，就是一组特殊的字符串，
+它由专门的类来负责解析并处理。
+JDK在1.4版本后，全面实现了正则表达式，主要有：
+java.util.regex.Pattern  
+和
+java.util.regex.Matcher 
+两个类组成。
+
+--
+Pattern 类 代表了正则表达式的编译形式，也就是
+        正则表达式的字符串必需要通过Pattern来
+	编译之后才能使用。
+
+Matcher 类 通过解释 Pattern 对 
+	character sequence 执行匹配操作的引擎。 
+
+--
+Pattern中的常用方法：
+public static Pattern complie(String regex);
+public static boolean 
+	matches(String regex,CharSequence cs);
+
+public Matcher matcher(CharSequence cs);
+
+如：
+String regex = "a*b";
+String source = "aaaaab";
+
+boolean b = Pattern.matches(regex,source);
+
+//相当于：
+boolean b = source.matches(regex);
+
+--
+Matcher中的常用方法
+public boolean matches(); //只匹配一次【精确】
+//尝试查找与模式匹配的字符序列
+public boolean find(); 
+public String group();
+public int start();
+public int end();
+...
+
+--
+正则表达式的语法
+Regular Expression,简称：REGEX
+
+基本规则：
+[abc]  匹配a，b, c中任意一个
+[^abc] 匹配a,b,c以外的任意字母
+[a-z]  匹配 a~z中任意字母
+[a-zA-Z] 所有字母
+[a-z&&[^bc]]
+..
+
+*
++
+?
+{n}
+{n,}
+{n,m}
+() 组
+
+常见的正则：
+QQ号：[1-9][0-9]{4,}
+邮编：\d{0,6}
+
+--
+三大类型小结：
+字符串
+
+数字
+
+日期
+
+--
+
+枚举(enum)
+也是一种数据类型。
+是一种类型安全的常量类.
+
+使用关键字 enum 来定义。
+所以，我们有了三个关键字来定义类型
+class -- 定义类（含 抽象类）
+interface  --  定义接口
+enum  -- 定义 枚举
+
+语法：
+public enum 枚举名{
+   //属性 
+   //方法
+}
+
+枚举的特点：
+1.自动继承 java.lang.Enum 类
+2.类型安全
+3.枚举可以有构造方法、普通属性以及抽象方法.(枚举也是抽象类的一种)
+4.枚举的构造方法是私有的。
+
+--
+
+public class Student{
+  private String name;
+  private Gender gender;
+  ...
+  public void setGender(Gender gender){
+	this.gender = gender;
+  }
+  ...
+}
+
+//调用者
+Student s1 = new Student();
+s1.setGender(Gender.MALE);
+
+//枚举的前身
+public class Gender{
+   //定义两个常量，分别表示男和女
+   public static final Gender MALE 
+			= new Gender();
+   public static final Gender FEMALE
+			= new Gender();
+
+   注：用 static 方法类名可以直接调用可以，final 常量不可更改
+
+   //把构造方法 (外界不能再new实例对象)
+   private Gender(){ }
+}
+
+//换成枚举
+public enum Gender{
+   MALE
+   ,FEMALE;
+}
+
+--
+所有，只有有固定常量值的类型才应该设计成枚举。
+如：性别、四季、星期、月份、
+扑克牌花色、扑克牌点数、...
+
+--
+
+
+
+
+
+
+

@@ -1,0 +1,29 @@
+HTML:Hyper text Markup Language
+
+id  name class
+
+<body> :bgcolor ->设背景颜色 --background:->背景图片
+
+<hr> 横线  size 粗细大小  color 改变颜色
+
+<b> <Strong> 加粗
+<i> <em> 斜体
+
+<p> 换行 隔一行 <br> 换行
+
+<a href> 超链接  target 1 _self 2 _blank
+
+<img > 图片 src url地址 alt  title 
+
+<pre> 保持输入格式
+
+<form> 用于数据提交 action url地址 method 1 get 2 post
+
+<input> type 1 text 2 password 3 radio 4 checkbox 
+5 submit 6 reset 7 button  8 hidden
+
+<textarea> rows cols 
+
+<select>  用于选择  <option>
+ 
+预习: dd dl dt  ul ol li  sup sub

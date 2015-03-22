@@ -1,0 +1,250 @@
+叶 加飞
+qq: 51467976
+
+--
+JAVA 语言的历史
+1995 年  Oak -- SUN (James Golsing)
+	  \- 改名为 java
+1997 JDK1.0 版本出现
+
+JDK的版本：
+1.0, 1.1, 1.2, 1.3, 1.4 -> 5.0 -> 6.0 -> 7.0
+
+--
+JDK, JAVA Development Kit, JAVA开发工具包
+     JDK是一套开发JAVA应用程序的平台，它包含：
+     编译器(compiler)、
+     运行环境(Runtime Enviornment)、
+     虚拟机(Virtual Machine)
+
+JAVA编译器:用来把JAVA源文件翻译成字节码文件的程序
+	它使用c语言编写。
+JAVA运行环境(JRE): Java Runtime Environment,
+	它是运行JAVA字节码文件的平台。
+	它使用JAVA语言编写，底层与JVM相关的部份采用C编写
+JAVA虚拟机, JAVA Virtual Machine
+	它的作用是用来屏蔽底层OS之间的差异，使用
+	JAVA语言开发的程序可以跨平台运行.
+	它是使用C语言编写。
+
+--
+搭建JDK环境 
+1.下载并安装JDK，主流版本是：6.0
+2.配置环境变量
+  a.添加 JAVA_HOME 环境变量
+  b.修改 PATH环境变量，把 %JAVA_HOME%\bin
+    目录添加到 PATH环境变量中。
+
+--
+测试是否配置正确：
+>java -version
+
+>javac
+
+--
+javac 代表的是 编译器
+java  代表的是 虚拟机
+
+-- ------------------------------------------
+JVM 与跨平台
+java语言是跨平台的开发语言，
+它可以 一次编写，到处运行(write once, run everywhere)
+
+--
+编译与运行
+java语言编写的程序叫做 java源文件，以.java为扩展名
+使用编译器(javac 命令)把java源文件编译成字节码文件，
+字节码文件是二进制文件，以 .class为扩展名。
+
+javac 命令语法：
+javac [选项] 源文件
+常见的选项有：
+-d <目录>  表示指定生成的字节码存放的路径。
+
+如：
+javac Hello.java
+
+
+--
+运行命令：
+java [选项] 类名
+
+-classpath <目录> 告诉JVM，去指定的目录搜索字节码文件
+
+--
+命令行的基本认识
+1.cmd 是一个Windows自带的命令解释器.
+
+常用的命令有：
+cd <目录>  表示切换工作目录。
+    目录可以是相对的、也可以是绝对的
+    .  代表当前目录
+    .. 代表上一级目录
+
+dir <目录> 查看当前/指定目录下的所有子目录和文件
+
+cls  清屏
+
+--
+API 文档
+ Application Programming Interface
+ 是一套由SUN公司提供的用来供JAVA程序员查看的
+ 类库文档。
+
+--
+JAVA语言平台(platform)
+JAVASE  - 标准版 (Standard Edition)
+
+JAVAEE  - 企业版 (Enterprise Edition)
+
+JAVAME  - 微平台版(Micro Edition)
+	  目前已被Android平台代替
+ME与EE 都是基于SE的。
+
+--
+1.掌握JAVA语言编程的基本结构
+   public class 类名 {
+	public static void main(String[] args){
+		//代码
+		//...
+		//...
+	}
+   }
+
+2.掌握javac和java 命令
+3.理解 -classpath 的作用
+4.在编译时，理解 -d 选项的作用
+
+--
+包 的概念
+
+作用：
+1.用来扩展类的命名空间
+2.用来管理项目中的类文件，因为包名编译完后
+  将会生成对应的文件夹。
+
+包的使用：
+1.使用 package 关键字来定义包
+2.一个类文件中只能有一条package 语句。
+3.package 语句必需放在第一行代码。
+4.包名使用.隔开，可以有多个层级
+5.包的命名一般采用公司域名倒置，再加上项目代码
+  如：com.taobao.项目代码.子包;
+      com.alibaba.项目代码.子包;
+      com.tz.项目代码.子包;
+      com.train.day01;
+如：
+package com.train;
+public class Hello {
+  ...
+}
+
+编译完后，Hello.class 会存放在你指定的目录下的
+com子录下的train子目录下。
+
+--
+类的全限定名
+是指 包名.类名
+事实上，JRE中提供的类库都是有包的。
+其中, String类与System 类都在 java.lang包，
+所以，String的全称是：java.lang.String
+      System的全称是: java.lang.System
+
+--
+JAVA编码规范与命名规则
+1.编码规范，采用是 Camel(驼峰法) 规范
+  起始大括号不独占一行。
+  结束大括号独占一行。
+2.命名规则
+  a.类名首字母大写，尽量采用名词。
+  b.如果类名由多个单词组成，
+    则每个单词的首字母都要大写,如：HelloWorld
+  c.如果单词较多，可以取其中的一些字母来代替。
+  d.不能使用关键字或保留字.
+
+--
+JAVA关键字和保留字：
+  public/class/static/void/int/byte/short/long
+  double/float/boolean/char/abstract/interface
+  native/synchronized/final/enum/if/for/switch
+  /....
+保留字：goto/const
+
+--
+JAVA语言的注释
+// 表示单行注释 
+/* */  表示多行注释
+
+注：注释是不会编译到字节码文件中的。
+
+--
+JAVA语法基础
+1.标识符(identify)
+定义：由字母、下划线、$、数字组成的字符序列，并
+且不能以数字开头或使用关键字/保留字.
+
+标识符的长度没有上限，但是尽量有意义。
+如：cup, _cup, $ABC
+    WhatCanIDoWhenGrilFriendCry
+
+标识符的作用是用来命名的。
+
+--
+2. 导入语句
+在一个类中，需要引用非本包中的其它类时，需要
+使用 import 导入语句。
+
+如果要引用JRE中自带类库中的 java.lang时，无需
+显示地引用，JVM会自动引入 java.lang下的所有类。
+
+关键字：import 
+可以有多条 import 语句。
+它在 package 语句和class定义语句之间。
+
+--
+知识点小结：
+1.JAVA语言的版本变迁 [了解]
+2.JAVA语言平台 【掌握】
+3.配置JDK环境  【掌握】
+4.编写第一个HelloWorld.java程序
+5.掌握编译和运行的命令
+  javac <选项> 源文件
+         -d 目录
+
+  java <选项> 类全限定名
+         -classpath 目录
+6.掌握package 语句
+7.掌握import 语句
+8.掌握标识符
+9.类的结构要掌握：
+  //包的定义
+  package 包名;
+  //导入语句
+  import ...;
+  ...
+  //类的定义
+  public class 类名{
+	//程序入口
+	public static void main(String[] args){
+	   //代码...
+	}
+  }
+10.注释 【掌握】
+
+--
+要求：
+一定要有包
+
+练习：
+1.写一段代码，打印出自己的姓名、年龄、性别、爱好
+
+2.写一段代码，输出如下的菜单
+————————————————————
+
+# 1. 按字母顺序浏览基库[单词与词汇]
+# 2. 做游戏学习单词[随机性]
+# 3. 测试自己的水平[随机性]
+# 0. 退出!
+
+————————————————————
+

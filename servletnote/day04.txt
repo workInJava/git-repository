@@ -1,0 +1,138 @@
+servlet的线程安全
+    SingleThreadModel:实现这个接口,就能让servlet
+    多实例,有多少请求就创建多少实例
+    
+    线程同步的两种方式:
+    1,用syncronized取锁住共享资源
+    2,利用Object类里的wait() notify() allNotify()
+
+servlet是单实例多线程执行的,
+    servlet的线程安全
+     1,利用线程同步的两种方式取保证servlet的线程安全
+     2,a,少用成员变量
+       b,少用静态变量
+       c,在操作文件或者图片等一些共享资源的时候,要加锁
+
+   
+    
+文件的上传:
+    <input type="file" name="" />
+
+    <form action="" method="post" enctype="multipart/form-data">
+
+    </form>
+
+过滤器和监听器
+     servlet里的有三种类
+     1,是普通的servlet类
+     2,过滤器类
+     3,监听器类
+
+  2,过滤器
+	过滤器就是一个程序,它先于与之相关的servlet
+	或者jsp运行在服务器上,过滤器可以附加到一个
+	或者多个servlet,jsp上,可以检查进入这些资源
+	的请求信息,过滤器可以做下面一些选择
+	a,以常规方式调用资源
+	b,利用修改过的信息调用资源
+	c,调用资源,但在发送响应到客户机前对其进行修改
+	d,阻止该资源调用,转到其他资源
+
+   
+   原理:
+       当客户机发出请求时,服务器根据应用程序的配置文件
+       设置的过滤规则来进行对其检查,
+
+   如何开发一个过滤器:
+       实现Filter接口
+       1,public void init(FilterConfig config) throws ServletException {
+		//config  接收初始化参数
+		code = config.getInitParameter("code");
+	}
+
+       2,public void doFilter(ServletRequest req, ServletResponse res,
+			FilterChain chain) throws IOException, ServletException {
+		HttpServletRequest request = (HttpServletRequest)req;
+		HttpServletResponse response = (HttpServletResponse)res;
+		
+		
+		response.setContentType("text/html;charset=GBK");
+		request.setCharacterEncoding(this.code);
+		
+		chain.doFilter(request, response);
+	}
+        3,public void destroy() {
+		// TODO Auto-generated method stub
+		
+		//销毁Filter 释放资源 服务卸载的时候 调用这个方法
+
+	}
+	
+	<servlet>
+		<!-- 给你的servlet配置一个名字 名字自己任意定 -->
+		<servlet-name>pic1</servlet-name>
+		<!-- 你的servlet的包名+类名的全路径 -->
+		<servlet-class>com.tz.upload.TestPictrue</servlet-class>
+		<!-- 初始化参数 -->
+		<init-param>
+			<param-name>code</param-name>
+			<param-value>GBK</param-value>
+		</init-param>
+	</servlet>
+
+
+  监听器:
+	专门用于对其他对象身上发生的事件和状态改变
+	进行监听,和响应处理的对象,当被监听的对象发生
+	改变的时候,立即采取响应的行动
+  三类
+    1,监听域对象的创建和销毁的事件监听器
+      (ServletContextListener,HttpSessionListener
+      ServletRequestListener)
+    2,监听域对象属性改变的事件监听器
+    (ServletContextAttributeListener,
+    HttpSessionAttributeListener
+    ServletRequestAttributeListener)
+    3,监听绑定到HttpSession域中的某个
+    对象的状态改变的监听对象
+    (HttpSessionActivationListener
+    HttpSessionBindingListener)
+   
+	
+	Listener接口	           Event类
+ServletContextListener	            ServletContextEvent
+ServletContextAttributeListener	    ServletContextAttributeEvent
+HttpSessionListener	            HttpSessionEvent
+HttpSessionActivationListener	
+HttpSessionAttributeListener	    HttpSessionBindingEvent
+HttpSessionBindingListener	
+ServletRequestListener	            ServletRequestEvent
+ServletRequestAttributeListener	    ServletRequestAttributeEvent
+
+如何写一个监听器:
+    实现监听的接口
+
+    配置:	<!-- 配置监听器 包名+类名 -->
+  	<listener>
+  		<listener-class>com.tz.Testlistner</listener-class>
+  	</listener>
+
+
+1,怎么写Servlet  a,实现servlet接口
+		 b,继承GenericServlet类
+		 c,继承HttpServlet (常用)
+2,servlet的生命周期
+   ????
+3,页面之间的数据共享
+  a,servletContext
+  b,session
+  c,cookie
+  d,隐藏域
+  e,request 转发
+
+4,转发和重定向
+
+5,filter
+
+6,listener
+

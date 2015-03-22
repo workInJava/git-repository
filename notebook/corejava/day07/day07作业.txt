@@ -1,0 +1,46 @@
+作业一：
+1.请设计2个枚举类，其中
+第一个枚举为：扑克牌花色
+SPADES, DIAMONDS, HEARTS, CLUBS
+
+第二个枚举为：扑克牌点数
+
+要求，每个枚举中都提供有参构造，参数为具体的字符串意思。
+
+//测试类：
+写一个循环，依次输出每个枚举值。
+
+----------------
+作业二:
+1.定义图书操作业务接口 IBookBiz
+有如下方法:
+//添加图书
+ void add(Book b);
+//根据图书name 来删除指定图书
+ void deleteByName(String name);
+//根据图书名来查找图书
+ Book findByName(String name);
+//打印出所有的图书信息
+ void outputAllBooks();
+
+2. 定义 数组图书管理业务实现类(ArrayBookBiz) 
+实现 IBookBiz接口，
+实现所有方法,
+提示，给出如下属性
+属性:
+private int capacity = 5;  //初始容量
+private int count; //代表有效图书数量
+private Book[] books ;
+方法：
+  就是实现接口中的所有方法
+
+最后，写测试类，测试这三个方法.
+
+
+
+
+
+
+
+
+

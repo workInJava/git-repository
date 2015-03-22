@@ -1,0 +1,183 @@
+集合框架 Java Collection Framework
+JCF的层次结构
+
+java.util.Collection [I]
+	\- List [I]   (有序可重复)
+	     \- ArrayList
+	     \- LinkedList
+	     \- Vector
+	\- Set [I]    (无序不可重复)
+	     \- HashSet
+	     \- SortedSet [I]
+		    \- TreeSet
+
+java.util.Map [I]     (无序不可重复)
+	\- HashMap
+	\- Hashtable
+	\- SortedMap [I]
+		\- TreeMap
+-- JCF 中的工具类：
+java.util.Collections
+
+--
+Set 
+特点：无序、不可重复
+实现类：
+HashSet, 底层采用 哈希算法
+
+公共操作：全部继承于 Collection接口
+
+--
+1.HashSet是如何保证元素的无序以及不可重复的？
+首先，添加到HashSet集合中的元素会调用它自己的
+hashCode方法，获取哈希码值，以此值来决定存放的
+位置，如后后面的对象的哈希码值与之前所加的元素的
+哈希码值“碰巧”相同，则会进一步调用equals方法，来
+决定此2个对象是否“相同”，如果返回true，说明相同，
+则后来的对象添加失败。
+如果返回false，则说明对象不同，则继承添加到一个
+空的位置中去。
+
+--
+Map 接口
+存放 键、值对
+实现类：
+HashMap, 底层采用 哈希算法
+特点：key值 无序、不可重复
+
+公共操作：
+put(Object key, Object value);
+putAll(Map map); 把map中的数据添加到当前map中
+remove(Object key); //移除对象
+
+Object get(Object key); //通过key来获取值 
+isEmpty(); //判断集合是否为空
+size();  //获取集合的元素(键-值对)数
+clear(); //清空集合
+containsKey(Object key); //判断集合中是否含有此key
+containsValue(Object value);//判断集合中是否含有此value
+
+注：Map是不能直接迭代的，需要先转换成Collection
+方法一、调用 values()方法，转换成 Collection
+Code:
+     Map map = new HashMap();
+     map.put(1,"one"); //key是Integer,value是String
+     map.put(10,"ten");
+     ...
+     //转成 Collection 
+     Collection c = map.values();
+     //此c中的元素是 String 类型
+
+方法二、调用 keySet()方法，把key值转换成Set
+Code:
+    Map map = new HashMap();
+    map.put(1,"one"); //key是Integer,value是String
+    map.put(10,"ten");
+    ...
+    Set set = map.keySet();
+    Iterator iter = set.iterator();
+    while(iter.hasNext()){
+       Integer key = (Integer)iter.next();
+       //再通过key来获取value
+       String value = map.get(key);
+       //输出
+       System.out.println(key+","+value);
+    }
+
+方法三：调用 entrySet() 方法，把map中的key和value
+ 封装的Entry对象添加到 Set 集合中
+Code:
+    Map map = new HashMap();
+    map.put(1,"one"); //key是Integer,value是String
+    map.put(10,"ten");
+    ...
+    Set set = map.entrySet();//此Set中存放的元素是 Entry类型
+    Iterator iter = set.iterator();
+    while(iter.hasNext()){
+	Entry e = (Entry)iter.next();
+	//通过Entry来获取key与value
+	Integer key = (Integer)e.getKey();
+	String value = (String)e.getValue();
+	//输出
+        System.out.println(key+","+value);
+    }
+
+--
+使用Map存自定义对象时的技巧
+1.key值尽量使用自定义对象中的唯一性属性。如：id
+
+2.Map的value可以是集合，如：List
+
+--
+HashSet 与 HashMap 之间的关系，
+实事上，HashSet的实现是基于HashMap, 它组合了
+HashMap,并利用HashMap key来存放自己的 元素，而
+value永远都是同一个Object.
+
+Code:
+public class HashSet{
+   ...
+   private static final Object PRESENT = new Object();
+   private HashMap map;
+   public HashSet(){
+	//组合
+	this.map = new HashMap();
+   }
+   ...
+   public boolean add(Object obj){
+	return map.put(obj,PRESENT);
+   }
+}
+
+--
+接口：SortedSet 
+实现类：TreeSet
+特点：排序、不重复
+底层实现， 采用 二叉树(Balance Tree)
+
+共性操作：来自于Set,
+
+原理：TreeSet是如何实现排序 并不重复的。
+要求，每个放入TreeSet中的元素都是“可比较的”，
+也就是说，这些元素都要实现：java.lang.Comparable
+接口。
+从放入第二个对象开始，TreeSet会把这个对象与前一个
+放入的对象强制类型转换成Comparable，然后，调用
+compareTo方法来决定大小和是否相等。
+
+
+所以，要求放入TreeSet中的元素要实现：
+java.lang.Comparable 接口。
+
+--
+但是，也可以利用另一个比较器接口来实现，
+这样，就不要求添加到TreeSet中的元素实现
+Comparable接口。
+
+代码：
+Comparator c = new Comparator(){
+   public int compare(Object o1, Object o2){
+	//按价格排
+	Book b1 = (Book)o1;
+	Book b2 = (Book)o2;
+	if(b1.getPrice() > b2.getPrice()){
+	   return 1;
+	}else if(b1.getPrice() < b2.getPrice()){
+	   return -1;
+	}else{
+	   return 0;
+	}
+   }
+};
+
+TreeSet set = new TreeSet(c);
+set.add(xxx);
+....
+
+
+--
+接口：SortedMap
+
+实现类：TreeMap
+
+

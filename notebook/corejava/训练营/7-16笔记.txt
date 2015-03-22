@@ -1,0 +1,155 @@
+数组 array
+定义，是一种“容器”对象，可以存储其它数据。
+数组是有类型的，而数组本身是对象类型。
+
+申明语法：
+数据类型[] 数组名;
+
+由于数组是对象类型，所以，要申请数组的空间，同样
+使用new操作符。
+
+数据类型[] 数组名 = new 数据类型[长度];
+
+注：在初始化数组空间时，一定要指定 长度。
+而且数组的空间一定是连续的。
+这样，根据数组元素的类型和长度，就能确定空间大小。
+
+如：初始化一个长度为10的整型数组：
+int[] intArr = new int[10];
+
+注：
+int\short\byte\long 数组中的元素的默认值是：0
+char 型数组中的元素的默认值是：'\u0000'
+boolean 型数组中的元素的默认值是：false
+float\double 型数组中的元素的默认值是：0.0
+对象类型数组中的元素的默认值是 null
+
+--
+数组的特点：
+1.长度是固定的，而且不能再改变
+2.空间是连续的
+3.通过length属性可以获取数组的长度
+4.通过下标访问，下标从0至length-1.
+
+--
+数组与数组元素
+数组是JAVA中的一种对象类型，是JVM内置的。
+而数组元素是存放在数组中的数据，它也是有类型的，
+它的类型在定义数组时确定。
+
+所以，才有 整型数组、字符数组、字符串数组、...
+注：某种类型的数组，只能存放某种类型的数据。
+
+如：
+String str;
+int[] a;
+byte b;
+byte[] bArr;
+bArr = new byte[5];
+String[] strArr = new String[4];
+Scanner[] s = new Scanner[3];
+
+--
+迭代和访问数组元素
+一般使用for循环来访问数组元素。
+如：
+int[] intArr = new int[5];
+intArr[0] = 105;
+intArr[1] = 239;
+...
+intArr[4] = 14;
+
+//迭代数组的元素
+for(int i=0;i<intArr.length;i++){
+	System.out.println(intArr[i]);
+}
+
+--
+给数组元素赋值的方法：
+1.在定义数组时，直接通过一对大括号来赋值
+如：
+int[] intArr = {10,34,123,1,56};
+
+2.也是使用大括号，但是显示地通过new操作符。
+如：
+int[] intArr = new int[]{10,34,123,1,56};
+//可以分开写：
+int[] intArr;
+intArr = new int[]{10,34,123,1,56};
+
+3.如果数据量大或者元素值有规律，则通过循环赋值
+int[] intArr = new int[100];
+for(int i=0;i<intArr.length;i++){
+	intArr[i] = 100+i+1;
+}
+如：定义一个字符数组，存放26个小写字母
+char[] letters = new char[26];
+//循环赋值
+for(int i=0;i<letters.length;i++){
+	letters[i] = (char)('a'+i);
+}
+
+--
+数组的工具类：
+java.util.Arrays
+提供了一系列操作数组的基本方法，比如：
+toString, sort, fill, binarySearch, ...
+
+--
+练习:
+请设计一个方法，根据用户传入的长度来创建一个
+整型数组，并把此数组中下标为奇数位的位置置为1，
+偶数位的位置置为0，并返回这个数组。
+
+public int[] init(int length){
+    
+}
+
+--
+数组元素的拷贝
+
+方法：System.arraycopy(Object src, int srcPos,
+		Object dest, int destPos,
+		int length);
+每个参数的含义是：
+ src  -- 代表源数组
+ srcPos  -- 代表源数组开始COPY的起始位置
+ dest -- 代表目标数组
+ destPos -- 代表目标数组存放的起始位置
+ length -- 代表copy的元素的长度
+
+--
+Arrays中也有一个静态方法：copyOf，
+它的作用是依据一个现成的数组，copy一份出来，
+形成一个新的数组，并返回。
+
+方法的申明如下：
+public static int[] copyOf(int[] src, int newLen);
+
+--
+数组的应用
+1.求极值
+2.排序[冒泡排序算法]
+3.查找指定的元素，返回下标
+4.插入元素
+5.删除元素
+
+作业：
+请写代码实现以上所有业务.
+public class ArrayApp {
+   //方法1：求最大值
+   public int max(int[] arr){
+   }
+   //方法2：求最小值
+   public int min(int[] arr){ }
+   //方法3：冒泡排序
+   public void bubble(int[] arr){}
+   //方法4：查找目标元素的下标
+   //如果找到，就返回下标，找不到，就返回-1
+   public int find(int[] arr, int target){}
+   //方法5：插入元素到指定位置
+   public int[] insert(int[] arr
+		,int pos,int element){}
+   //方法6：删除指定元素
+   public int[] delete(int[] arr,int target){}
+}

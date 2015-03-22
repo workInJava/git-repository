@@ -1,0 +1,23 @@
+练习5:(接口)
+为SavingAccount和CreditAccount各自添加一个子类
+LoanSavingAccount类:用户可以贷款,不可以透支
+LoanCreditAccount类:用户可以贷款,可以透支
+
+说明:贷款和透支是不一样的,透支指的是账户余额小于0,而贷款用户需要一个贷款额的属性.
+在ATM机上,用户可以选择贷款,也可以选择还贷款,而还贷款就是要把账户余额上的资金转到贷款额上
+例如:用户余额10000元,贷款额100000元,用户可以选择还款5000元,则用户余额变为5000,贷款额变为95000元.
+
+利用接口来抽象出LoanSavingAccount类和LoanCreditAccount类的共性
+接口中的方法:
+requestLoan:贷款
+payLoan:还贷
+getLoan:获取用户贷款总额
+
+为Bank类添加三个方法,
+贷款:参数 id,贷款额,返回修改过的Account对象
+还贷款:参数 id,还款额,返回修改过的Account对象
+统计所有账户贷款的总数
+
+
+练习6:(Object)
+为Account类及其子类添加toString方法和equals方法

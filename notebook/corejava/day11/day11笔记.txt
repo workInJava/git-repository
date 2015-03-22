@@ -1,0 +1,282 @@
+JAVA集合框架小结
+工具类：
+Collections
+比较器接口：
+java.util.Comparator
+可比较的接口:
+java.lang.Comparable
+集合接口与类：
+Collection
+    \- Set
+        \- HashSet
+	\- SortedSet
+		\- TreeSet
+    \- List
+	\- ArrayList
+	\- LinkedList
+	\- Vector
+Map
+  \- HashMap
+  \- Hashtable [多线程安全的]
+  \- SortedMap
+	\- TreeMap
+--
+1.ArrayList与Vector的区别
+2.HashMap与Hashtable 的区别
+答：后者是多线程安全的。
+
+3.Set与List的区别
+答：Set的特点：无序、不可重复
+    List的特点：有序、可重复
+  
+4.Collection与Map的区别
+答：一个存放元素值，一个是 键-值 对
+
+5.如何迭代Map?
+答：有3种方式
+    values()
+    keySet()
+    entrySet()
+
+6.如何选择 ArrayList与 LinkedList
+答：ArrayList采用 数组实现，查询效率高。
+    LinkedList采用双向链表实现，增删效率高。
+
+7.请说明ArrayList,LinkedList,HashMap,TreeMap各自的实现
+  ArrayList -> 数组
+  LinkedList -> 双向链表
+  HashMap  -> 哈希表
+  TreeMap  -> 二叉树
+
+--
+HashSet与HashMap 之间的 关系
+TreeSet 与 TreeMap 之间的关系
+答：都是在Set中 组合了相应的Map,只利用map的
+key位置来存放元素，而value位置永远都是 Object.
+
+--
+集合的排序
+1.只是针对 List 以及 SoredSet、SortedMap
+
+它们三个接口的排序原理是一样的，要么是要求
+元素本身实现 Comparable接口，
+要么是在排序时/在构建集合对象时，传入Comparator
+的实例。
+
+--
+泛型(Generic)
+定义，类型参数化
+语法：<泛型字母>
+
+泛型字母 可以是任意一个大写字母。
+
+注：
+泛型是JDK5.0之后推出一些特性，它的目的主要是给
+”容器“类使用【注：泛型可以使用在任何类上面】，
+这样，可以保证”容器“中的类型是安全的。
+
+所以，JDK5.0中，SUN公司把整个JCF全部改写成支持
+泛型了，如：List<E>, Map<K,V>,...
+
+泛型主要用在：
+1.泛型类, 就是指在类定义时，使用泛型
+  定义在泛型类中的泛型字母，可以在本类的任何地方使用。
+
+2.泛型方法
+  类本身不是泛型类，但是，却含有泛型方法。
+语法：
+public class 类名{
+   ...
+   public <T> T add(T a1, T a2){
+
+   }
+}
+
+--
+使用泛型的注意事项：
+1.泛型只是一个编译期间的功能，它没有多态。
+2.生成的字节码中 是没有泛型的。
+
+List<String> strList = new ArrayList<String>();
+//此时，strList这个集合对象只能存放 字符串类型的元素
+strList.add("jack"); //ok
+strList.add(23.4); //compile error
+...
+
+Number n = new Integer(10);//ok
+List list = new ArrayList(); //ok
+
+List<Number> nList = 
+	new ArrayList<Integer>(); //compile error
+
+--
+泛型的通配符和限定符
+通配符：?
+限定符：
+   extends 用来限定上限
+   super   用来限定下限
+   &  满足多个条件
+
+如：
+List<?> list = new ArrayList<Integer>();//ok
+这样写，list可以指向任意范型的集合，但是，
+只能添加 null值到集合中，其它的值加不了
+list.add(10); //error
+list.add(null); //ok
+
+--
+自定义泛型类
+
+
+//没有泛型时
+public class Entry{
+   private Object key;
+   private Object value;
+
+   public Entry(Object key,Object value){
+	this.key = key;
+	this.value = value;
+   }
+   public Object getKey(){
+	return this.key;
+   }
+   public void setKey(Object key){
+	this.key = key;
+   }
+   public Object getValue(){
+	return this.value;
+   }
+   ...
+}
+
+//定义泛型类：
+public class Entry<K,V>{
+   private K key;
+   private V value;
+
+   public Entry(K key,V value){
+	this.key = key;
+	this.value = value;
+   }
+   public K getKey(){
+	return this.key;
+   }
+   public void setKey(K key){
+	this.key = key;
+   }
+   public V getValue(){
+	return this.value;
+   }
+   ...
+}
+
+//客户端
+Entry e1 = new Entry(1,"one");
+Entry e2 = new Entry("jack",45.3);
+//取出来
+Integer i2 = (Integer)e1.getKey();
+
+//使用泛型
+Entry<Integer,String> e3 
+	= new Entry<Integer,String>(1,"one");
+//取出来
+Integer i = e3.getKey();
+
+--
+思考：
+List<?> a = new ArrayList<String>(); //ok
+List<?> b = new LinkedList<String>(); //ok
+Set<CharSequence> c = new HashSet<String>();//error
+Set<String> d = new TreeSet<String>();//ok
+Map<Number,String> e 
+	= new HashMap<Integer,String>(); //error
+Map<?,?> f = new HashMap<Integer,String>();//ok
+
+--
+JAVA IO流
+此技术是JAVASE提供的读写文件的类库。
+IO流全称：InputStream/OutputStream
+包路径：java.io
+
+--
+一、java.io.File 类
+定义：文件和目录路径名的抽象表示形式。 
+也就是说，每一个合法文件和目录名，都可以是File
+的实例。
+构造方法：
+public File(String path); //这个路径可以是绝对，也可以是相对
+public File(File parent,String path);
+public File(String parent,String path);
+
+-- 常见操作：
+File f = new File("E:\共享\CoreJava\day11");
+f.isFile();//判断是否是文件
+f.isDirectory();//判断是否是目录
+f.exists(); //判断f实例代表的路径是否存在
+f.createNewFile();//创建新文件
+f.mkdir();//创建目录
+f.mkdirs(); //创建整个目录结构.
+f.delete(); //删除f代表的路径,只能删除空目录
+f.deleteOnExit();//当程序结束后，才执行删除.
+f.length(); //返回文件的大小，目录大小不确定
+
+...
+
+--
+java.io.FileNameFilter 
+文件过滤器
+public boolean accept(File parent,String name){
+  ...
+}
+
+--
+java.io.File 类的实例是不能操作文件内容的，它
+只能操作文件本身的一些信息，比如：大小、可读
+、可写、可执行、修改时间、创建、删除....
+
+如果你想要打开一个文件的内容，进行读写操作，则
+必需使用 流(Stream)
+
+流分为：输入流与输出流
+输入流: 把外部数据(文件、网络)读到JVM中，叫输入
+输出流：把JVM中的数据写到外部(文件、网络)，叫输出
+
+按照流所操作的文件类型不同，又分为：
+字节流，操作二进制文件
+
+字符流，操作文本文件
+
+--
+字节流的API
+字节输入流：
+java.io.InputStream [抽象父类]
+	\- FileInputStream 操作二进制文件的流
+	\- ByteArrayInputStream 操作内存
+	\- FilterInputStream [过滤流]
+		\- BufferedInputStream 【带缓存的】
+		\- DataInputStream [操作基本类型]
+	\- ObjectInputStream [操作对象类型]
+	....
+公共操作：
+   int read(); //读取单个字节
+   read(byte[] buf); //最多读到buf.length个字节到buf中
+   read(byte[] buf, int off, int len);
+
+   close(); //释放资源
+   avaliable(); //获取输入流的有效字节数
+
+字节输出流：
+java.io.OutputStream [抽象父类]
+	\- FileOutputStream
+	\- ByteArrayOutputStream
+	\- FilterOutputStream
+		\- BufferedOutputStream
+		\- DataOutputStream
+	\- ObjectOutputStream
+	...
+公共方法：
+   write(int b)
+   write(byte[] buf)
+   write(byte[] buf, int off, int len)
+--
+Code:

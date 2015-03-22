@@ -1,0 +1,52 @@
+CSS:caseCade style sheet
+
+语法基础:
+	选择器{属性:值}
+	
+	*           通用匹配选择器
+	标签选择器 <body> <p>   
+	类选择器   class  .className
+	ID选择器   ID     #idValue
+	组合选择器 E,F,G
+	后代元素选择器  E F
+
+外部
+内部
+行内
+
+背景:background-image  背景图片
+     background-color   背景颜色
+     background-repeat
+     background-position
+
+字体:color  字体颜色
+     font-family  字体形式
+     font-size 字体大小
+     text-decoration 装饰
+     line-height  行高
+
+    
+ 定位:position:absolute relative 
+      top 
+      right 
+      bottom
+      left
+ 尺寸:height  高度
+      width    宽度
+ 布局:float    对象浮动位置
+      display  隐藏和现实对象
+
+  外补丁:margin:0px(上) 0px(右) opx(下) 0px(左)
+  边框:　border：宽度　样式　颜色
+  内补丁：padding:同外补丁
+  列表:Lists list-style-image list-style-type
+
+  表格: table:border-collapse separate(单独边框)
+	collapse(合并边框) 
+
+ 为类:
+	:link--设置a对象在未被访问前的样式表属性
+	:hover--设置对象在其鼠标悬停时的样式表属性
+	:active--设置对象在被用户激活（在鼠标点击与释放之间发生的事件）时的样式表属性
+	:visited--设置a对象在其链接地址已被访问过时的样式表属性
+	:focus--设置对象在成为输入焦点（该对象的onfocus事件发生）时的样式表属性

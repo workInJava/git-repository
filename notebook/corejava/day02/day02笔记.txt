@@ -1,0 +1,322 @@
+JAVA基础知识
+1.JAVA语法基础
+  包
+  导入
+  类的定义
+2.标识符
+3.数据类型
+4.变量、常量、字面量
+5.运算符
+6.表达式
+7.分支语句
+8.条件判断
+9.循环
+  for
+  while
+  do while
+  continue
+  break
+  增强for循环
+
+10.数组
+   一维数组
+   二维数组
+--
+辅助性知识
+1.API
+  java.lang.System
+  java.lang.String
+  java.lang.Integer
+  java.lang.Math
+  java.util.Scanner
+  java.util.Random
+  java.util.Arrays
+  ...
+2.JAVA内存结构和垃圾回收机制
+  栈区
+  堆区
+  永久区
+
+3.方法
+修饰符 返回类型 方法名([参数列表]) [抛出的异常]{
+    //方法体
+}
+
+4.类加载的过程
+  引导类加载器 [搜索 JAVA_HOME\jre\lib]
+     |
+  扩展类加载器 [搜索 JAVA_HOME\jre\lib\ext]
+     |
+  应用类加载器 [搜索-classpath 指定的目录]
+     |
+  自定义类加载器
+
+java -classpath bin com.corejava.day01.HelloWorld
+
+--
+面向对象的基本思想
+Orient - Object,简称 OO
+OOA/D, 面向对象的分析/设计
+OOP,   面向对象的编程
+
+面向对象的语言有三大基本特征：
+1.封装
+2.继承
+3.多态
+
+JAVA语言完全具备以上三大特征，所以，JAVA语言是
+完全面向对象的编程语言。
+
+面向对象思想与面向过程(process)思想的区别？
+1.面向过程注重算法与数据结构，而后才是对象
+2.面向对象注重的是对象，而后才是算法与数据结构
+
+--
+OO的编程思路：
+1.首先，从业务中找 “对象”
+2.其次，要对这些“对象"进一步梳理，采用”形而上“
+  的思想来”抽象“出 类型。
+3.根据这些”抽象“出来类型，进一步分析，确定它们
+  拥有什么(属性),以及 能干什么(方法).
+4.根据业务的需要，进一步确定这些”类型“之间的关系。
+  这些关系可能有：
+  继承、实现、关联、聚合、组合、依赖
+
+--
+如何利用OO的思想来写代码？
+
+可以把生活中任一的实体(虚的或实的)”抽象“出类型。
+如：Bus, Flowers, Fruits, Animals, Dog,Cat,
+    Bike, Cup, Desktop, .....
+然后，确定这个类的属性(fields)和方法(methods)
+
+--
+属性(Fields):是指本类的对象拥有的东西。
+方法(methods):是指本类的对象能干什么，也就是功能。
+
+--
+类型与对象的关系:
+类型是对象的抽象化，对象是类型具体化/实例化.
+
+-- 
+对象的生命周期
+是指对象从创建到销毁的过程。
+对象的创建使用 new 运算符。
+对象的销毁是当没有引用指向它时，会被GC回收。
+
+--
+注：同一对象的，不同的人从不同的视角，得到的属性
+和方法也不一定相同，这是完全合理的。
+
+如：以 水杯为例
+public class Cup {
+   //属性 [拥有什么]
+   private double price; //单价
+   private String color; //颜色
+   private double capacity; //容量
+   private Date produceDate; //出厂日期
+   private String brand; //品牌
+   //方法
+   public void show(){//展现这个水杯的信息 }
+}
+
+--
+属性的语法：
+修饰符 数据类型 属性名 [=初始值];
+
+修饰符有：
+  public/protected/默认/private  访问控制修饰符
+  static/final 特殊修饰符
+修饰符可以有多个，而且不分顺序.
+
+--
+如果类的属性没有赋初值，则会有默认值。
+对象类型属性 的默认值是 null
+整型属性的默认值是 0
+浮点型属性的默认值是 0.0
+boolean类型属性的默认值是 false
+char 属性的默认值是 '\u0000'
+
+--
+为什么属性尽量要写成 private ?
+因为：
+1.属性是对内的，不应该直接暴露出来，破坏封装性
+2.如果属性的值有设定范围，则外界通过直接访问时
+赋给一个不合理的值给到属性。
+  如果是私有的，则外界不能直接赋值，必需通过方法
+  来赋值。那我们就可以在方法中做参数的有效性判断。
+
+--
+使用方法给属性赋值，有：
+1.通过构造方法
+2.通过set方法
+set方法 命名是规则的：
+ set拼属性的首字母大写。
+如：setColor, setBrand, setCapacity
+ 它返回类型是 void， 有相应的参数。
+
+如果，想要获取某个属性的值，则需要通过 get系列
+方法来获取。
+get方法的命名： get拼上属性首字母大写。
+如：getBrand, getColor, getCapacity,getPrice,...
+它没有参数，但是有返回类型。【由属性决定 】
+
+--
+构造方法
+1.方法名与类名同名
+2.没有返回类型
+3.构造方法可以重载，所以，同类中可以有多个构造方法
+
+特点：
+a.如果一个类中，没有提供任何显示构造方法，则系统
+会自动为此类添加一个 空参构造。
+b.如果你写了构造方法，则系统不再提供。
+
+作用：
+1.创建对象时所需要调用的方法
+2.用来给属性赋值
+
+--
+练习：
+1.中午时间，把Cap类的 get与set方法完成。
+
+2.请自己创建一个类，提供不少于3 个属性，
+并完成构造方法、get/set系列方法.
+并做最后的测试。
+
+--
+类由 属性和方法组成，【记住，类之间是有关系的】
+
+类的构造方法
+set/get 方法
+
+--
+this 关键字
+1.代表当前对象，可以把它想象成指向当前对象的指针。
+  一般是用在：
+  当方法的形参与属性名同名的情况下。
+
+2.可以用在构造方法中去调用另一个构造方法。
+  前提：
+  必需在构造方法中才能使用此语法
+  必需放在构造方法中的第一条语句。
+
+--
+对象创建的过程[三步曲]
+1.分配属性空间[堆]  -- 对象OK
+2.给属性赋初始值[默认值]
+3.调用构造方法
+
+如：
+Cup c1 = new Cup("乐扣","红色");
+...
+c1.setCapacity(1.1);
+c1.setPrice(15.7);
+
+--
+Cup c1 = new Cup("乐扣","白色");
+...
+//c1 = new Cup("乐扣","绿色");
+c1.setColor("绿色");
+
+注：构造方法给属性赋值只有一次机会
+所以，set方法给属性赋值要灵活得多。
+
+--
+类之间的关系
+在某个类中，有其它自定义类型做为自己的属性类型。
+
+--
+如：班级与学员
+public class Clazz{
+  private String name;
+  private int capacity; //容量
+}
+
+public class Student{
+  private String name;
+  private Date birth;
+  ...
+  private Clazz clazz;
+}
+
+--
+类与对象
+
+对象与引用
+
+--
+封装
+ 就是指把需要公开的公开，不需要的绝对不要公开，
+ 所以，封装就是最大化地隐藏细节。
+
+从代码上来理解：
+1.属性尽可能地私有化
+2.不需要对外的方法，一定要私有化.
+3.尽可能地恰到好处地使用 访问控制修饰符。
+
+封装的策略：
+1.把对象的属性、get/set方法、与业务方法全部
+封装到同一个类中。
+
+2.把对象的属性、get/set方法 单独封装成一个
+实体类(Entity)，而把业务方法独自封装成一个
+业务类(Business)。
+
+如：银行转帐相关的业务
+策略一：
+public class Account{
+   private int id;
+   private String name;
+   private double balance; //余额
+   ...
+   //法
+   ...set与get方.
+   //构造方法
+   ...
+   //业务方法
+   public void withdraw(double money){ ...}
+   public void tranfer(Account to, double money){}
+   ...
+}
+
+策略二：
+//实体类
+public class Account{
+   private int id;
+   private String name;
+   private double balance; //余额
+   ...
+   //法
+   ...set与get方.
+   //构造方法
+   ...
+  
+}
+//业务类
+public class AccountService{
+   //业务方法
+   public void withdraw(Account a,double money){ ...}
+   public void tranfer(Account from,
+		Account to, double money){}
+   ...
+}
+
+--
+访问控制修饰符
+		所有类	子类	同包	本类
+public		  yes	yes	yes	yes
+protected	  no    yes     yes     yes
+[默认]		  no    no      yes     yes
+private           no    no      no      yes
+
+--
+
+
+
+
+
+
+
+
+

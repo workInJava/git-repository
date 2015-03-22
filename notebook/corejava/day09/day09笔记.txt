@@ -1,0 +1,434 @@
+内部类 相关问题点：
+
+1.为什么要使用内部类？
+  a.内部类的优势是 可以直接访问外部类成员
+  b.可以帮助JAVA语言实现多重继承的功能，并且没有
+    多重继承的麻烦。
+
+2.内部类的区别？
+  一个嵌套类(静态内部类），三个内部类
+
+  嵌套类(静态内部类), 只能访问外部类的静态成员。
+  成员内部类，可以访问外部类的所有成员(含静态)
+  局部内部类(匿名内部类)，可以访问外部类的所有
+   成员(含静态),而且还可以访问所在方法的常量。
+
+--
+枚举的相关问题：
+1.枚举能否被继承
+  不能，因为枚举的构造方法是私有的，所以，不
+  可能有子类
+
+--
+如何选择异常？
+1.优先从 JRE 自带的类库中选取，这就要求你对常见的
+异常类型要熟悉。
+像：空指针、数组下标越界、类型转换异常、
+    不合法的参数异常、不合法的状态异常
+
+2.如果JRE自带的异常不能符合你的要求，则你需要
+自定义业务异常。
+
+--
+可以用throws向外抛出异常，但最后还是要解决，
+为什么不立刻解决？
+答：如果自行解决后，对于调用者来说，不知道出现
+了异常，那么，调用者与被调者之间就不能很好地协调。
+
+public void a(){
+  ...
+  try {
+   b();
+   //成功
+  }catch(XXXException e){
+    ...
+    //失败
+  }
+}
+
+public void b() throws XXXException{
+  ...
+  //有可能出现异常
+  try {
+    ...
+  }catch(Exception e){
+    ...
+    //重新抛出
+    throw new XXXX(e);
+  }
+}
+
+--
+了解静态导入特性与可变长参数
+静态导入，JDK5.0推出的特性，可以在import时，导入
+到静态属性这个级别。
+语法：
+import static 静态成员全路径;
+如：
+import static java.lang.Math.PI;
+
+--
+可变长参数
+特点，参数的个数可以不确定，在调用时才得以确定。
+语法：
+修饰符 返回类型 方法名(类型... 参数) {
+
+}
+
+--
+类(对象)之间的关系
+
+		UML图形
+继承  IS A	实心线+空心三角形
+实现  IS A	虚线+空心三角形
+以上两种都是 类的纵向关系
+
+以下四种是 类的横向关系
+关联  HAS A     实线+箭头   ————>
+  组合          实线+实心菱形  
+  聚合		实线+空心菱形  ————<>
+依赖  USE A	虚线+箭头  ----->
+--
+关联与依赖的区别
+关联的程度比依赖现高些。
+关联关系描述的是 拥有的关系，可以想象成 “属性”
+而依赖关系描述是 使用的关系，可以想象成 “变量”
+如：
+public class Student {
+  ...
+  private Computer c; //学员 拥有 电脑
+}
+public class Computer {
+  ...
+}
+//学员(Student与电脑Computer 
+	就是 单向一对一关联关系)
+
+--
+public class Screw{
+   ...
+}
+public class ScrewDriver{
+   public void driver(Screw s){
+	...
+   }
+}
+//ScrewDriver与Screw 就是 依赖关系。
+ScrewDriver 使用 Screw 。
+
+--
+关联的特点：
+1.方向性
+  单向
+  双向
+2.多重性
+  一对一
+  一对多
+  多对多
+
+--
+组合与聚合
+组合与聚合都是关联的一种，也是HAS A的关系，但是
+他们与关联所不一样的是：它们强调的是 整体与局部
+的关系，而关联调强的是“平级”关系。
+
+组合与聚合的区别？
+要从代码上来区别，
+组合关系是最强的，它的特点是：整体对象负责创建
+局部对象，也就是说局部对象的生命周期由整体对象
+负责。
+比如：
+人与心脏的关系
+public class Human{//整体
+  ...
+  private Heart heart;//局部
+  private Glass glass; //局部
+
+  public Human(Glass g) {
+    //负责初始化局部
+    this.heart = new Heart();
+    //
+    this.glass = g;
+  }
+}
+public class Heart{
+
+}
+public class Glass{
+   ...
+}
+而聚合关系的特点是：
+整体对象不负责局部对象的生命周期，局部对象由外
+界传递进来。
+
+--
+备注：
+UML, Unified Model Language,统一模型语言，
+是在软件设计中标准的图形化语言。
+
+有专门的软件来绘制UML图形，这些软件有：
+IBM Rational Rose, 商业化很高，收费的
+ModelIO, 基于Eclipse平台开发的，免费
+JUDE, 小型的UML图形绘制工具，免费
+...
+
+--
+抽象类与接口的区别？
+相同点：
+  a.都是抽象数据类型
+  b.都可以做为具体类的父类型
+不同点：
+  a.抽象类是部份抽象(有构造、实现方法)，
+    而接口是完全抽象
+  b.抽象类是单继承，而接口可以多继承
+
+如何选择抽象类和接口？
+很多时候，使用抽象类和接口都可以达到目的，请优
+先选择接口。
+
+--
+集合框架
+定义，就是一组用来保存对象的“容器”类型。
+Java Collections Framework, 简称 JCF
+它由SUN公司制订并实现，由一系列的接口和实现类
+所组成，这组接口和实现类存放在 java.util包中
+
+分类：
+一、Collection
+    存放对象，或叫元素(element)
+
+Collection又分为两种不同的接口：
+a. List 子接口
+   特点：有序、可重复
+b. Set  子接口
+   特点：无序、不可重复
+
+他们的共性操作：
+add(Object obj); 添加元素到当前集合对象中
+addAll(Collection c); 添加集合c中的所有元素
+clear(); 添空此集合
+remove(Object obj); 从集合中移除指定的 obj
+removeAll(Collection c);把当前集合中含c里面的元素全部移除
+retainAll(Collection c); 取交集
+
+size(); //返回集合中元素的个数
+isEmpty(); //判断此集合中是否有元素。
+contains(Object obj);判断集合中是否包含此对象
+containsAll(Collection c); 
+
+iterator(); //返回指向此集合元素的迭代器。
+
+--
+java.util.Iterator 迭代器接口
+作用，用来迭代集合的元素，初始化后，迭代器指向
+集合元素第一个位置的前一个位置。
+核心方法：
+hasNext(); --> boolean
+next();   ---> Object
+
+二、Map
+    存放的对象是由 key和value组成的键、值对
+    key与value 一一对应。
+    key值不能重复。value无要求。
+--
+1. List 接口
+有序、可重复
+此接口继承于 Collection，同时，扩展了新的功能：
+get(int index); --> 据下标找到元素
+indexOf(Object obj);
+lastIndexOf(Object obj);
+set(int index, Object element);
+subList(int fromIndex,int endIndex);
+
+实现类：
+a. ArrayList,
+   此实现底层采用 数组完成。
+   优点：直接通过下标访问，存取速度快，也就是
+   说：查询效率最高。
+
+   缺点：插入、删除元素时，效率极低。
+
+b. LinkedList,
+   此实现底层采用 双向链表
+   优点：插入、删除元素时，效率极高。
+   缺点：查询效率极低，因为总是从根节点开始。
+
+c. Vector,
+   同ArrayList的实现一模一样。
+   但是此类的所有方法都是线程安全的，也就是
+   重量级的，效率相对来说会低一点。
+   在非多线程环境下，尽量使用ArrayList
+
+--
+集合的使用
+1.往集合中添加元素
+2.查找元素
+3.删除元素
+4.清空
+5.迭代元素 [最重要]
+
+-------------------------------------------
+当一个集合是以另一个集合元素为构造创建出来时，
+此时，这两个集合虽然是两个集合对象，但是，元素
+是同一组元素。
+所以，如果是结构性操作，则两个集合互不影响。
+如果是非结构性操作，则有影响。
+-------------------------------------------
+集合的结构性操作：
+  是指操作集合本身，比如：元素的顺序(排序、打乱)
+  添加新元素、删除元素、查找、清空。
+
+集合的非结构性操作：
+  是指通过集合来操作集合元素，这样的操作就是非结构
+  性操作。
+
+--
+List接口中的 subList方法
+public List subList(int start,int end);
+这个方法返回原集合中从 start(含)至end(不含)之间
+的元素组成的集合。
+这个方法获取的集合，在做结构性操作或非结构性操作
+时都会影响原集合，反之亦然。
+
+--
+集合的工具类：
+java.util.Collections
+常用方法：
+   shuffle(List list); //打乱顺序[随机]
+   sort(List list); //排序
+   sort(List list, Comparator c); //排序
+
+   reverse(List list);//倒转顺序
+   fill(List list, Object val);//
+
+--
+注：集合本身是对象，所以，集合中同样可以存放集合。
+比如：
+List a = new ArrayList();
+a.add(10);
+a.add(100);
+List b = new ArrayList();
+b.add(3.134);
+b.add(4.345);
+
+List c = new ArrayList();
+c.add(a);
+c.add(b);
+//请各位写代码，把 集合c中的所有元素的值迭代出来。
+
+Iterator iter = c.iterator();
+while(iter.hasNext()){
+   Object o = iter.next();
+   //强制类型转换
+   List list = (List)o;
+   //继续迭代
+   Iterator it = list.iterator();
+   while(it.hasNext()){
+	Object obj = it.next();
+	//打印
+	System.out.println(obj);
+   }
+}
+
+--
+LinkedList，
+这个类采用双向链表实现，提供了大量的堆栈、队列
+相关的操作，如：
+push,pop, offerFirst,offerLast, peek ,....
+
+
+数据结构：
+堆栈,[FILO]
+特点：先进后出，First In,Last Out
+方法有：
+push 进栈
+pop  出栈
+peek 查看栈顶元素 
+isEmpty 判断栈是否为空
+size  有效元素个数
+
+队列,[FIFO]
+特点：先进先出，First In,First Out
+offer 入队
+poll  出队
+peek 查看队顶元素 
+isEmpty 判断队列是否为空
+size  有效元素个数
+
+-- 思考：
+请自行实现一个栈的数据结构,可以利用以下哪个类？
+A. Vector    B. LinkedList 
+C, ArrayList D.HashSet
+
+如何实现？
+A. 写一个 Stack类继承 LinkedList
+B. 写一个 Stack类组合 LinkedList
+
+请说明原因？
+选择 B
+原因：
+ 。。。。。。
+
+代码：
+public class MyStack{
+   //组合 LinkedList
+   private LinkedList ll;
+   //构造
+   public MyStack(){
+      //负责初始化 LinkedList
+      this.ll = new LinkedList();
+   }
+   public void push(Object o){
+	//委托
+	ll.push(o);
+   }
+   public Boolean isEmpty(){
+	return ll.isEmpty();
+   }
+   public Object peek(){
+	return ll.peek();
+   }
+   public int size(){
+	return ll.size();
+   }
+   public Object pop(){
+	return ll.pop();
+   }
+   public String toString(){
+	return ll.toString();
+   }
+
+}
+
+//再写一个 MyQueue 类，也是采用组合
+public class MyQueue{
+     private LinkedList ll;
+   //构造
+   public MyStack(){
+      //负责初始化 LinkedList
+      this.ll = new LinkedList();
+   }
+
+   public void offer(){
+  	ll.offer();
+   }
+   public Object peek(){
+	return ll.peek();
+   }
+   public Boolean isEmpty(){
+	return ll.isEmpty();
+   }
+   public int size(){
+	return ll.size();
+   }
+
+   public Object poll(){
+	return ll.poll();
+   }
+
+    public String toString(){
+	return ll.toString();
+   }
+}
+
+

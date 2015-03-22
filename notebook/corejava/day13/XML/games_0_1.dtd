@@ -1,0 +1,10 @@
+<!ELEMENT games (game+)>
+<!ELEMENT game (name, type, mode, detail?)>
+<!ATTLIST game
+		   id CDATA #REQUIRED>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT type (#PCDATA)>
+<!ELEMENT mode (#PCDATA)>
+<!ELEMENT detail (year, company)>
+<!ELEMENT year (#PCDATA)>
+<!ELEMENT company (#PCDATA)>

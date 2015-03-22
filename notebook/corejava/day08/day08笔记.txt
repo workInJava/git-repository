@@ -1,0 +1,329 @@
+枚举
+
+特点：
+1.自动继承 java.lang.Enum
+2.类型安全
+3.构造方法私有化
+4.可以有普通属性、抽象方法
+
+如：
+public enum Gender{
+   MALE
+   //public static final Gender MALE = new Gender();
+   ,FEMALE;
+}
+
+注：枚举类型可以使用在 switch 语句中。
+
+--
+JAVA 异常与内部类
+
+异常(Exception)
+--
+定义，就是指程序在运行过程可能出现的意外。
+
+既然程序无可避免异常的出现，所以，就需要一种
+异常 捕获和处理的机制，JAVA语言提供了相关的机制。
+使用
+try {
+   //把有可能出现异常的代码写在此块中
+   //...
+} catch(异常类型 变量名){
+   //一个try块中，可以跟多个 catch 分支
+   //所以，当出现的异常与本catch块中的异常类型
+   //匹配时，则进入本 catch块。
+
+   //catch块的作用当然是 处理异常的。
+
+} finally {
+   //此块一定会被执行，不管try块中的代码是否出现
+   //异常，所以，它一般是用来释放资源的。
+}
+
+语句块来捕获取和处理异常。
+
+注：
+try 块一定要有，可以单独与 catch配合，也可以
+单独与 finally 块配合，或者三者一起配合。
+所以:
+try {
+  ...
+} catch (异常类型 变量名){
+  ...
+}
+和
+try {
+  ....
+} finally {
+  ....
+}
+和
+try {
+
+} catch (异常类型 变量名) {
+
+} finally {
+
+}
+--
+JAVA异常的分类
+java.lang.Throwable
+	\- 异常(Exception) java.lang.Exception
+		\- 运行时异常(未检查异常) 
+		   RuntimeException
+		     \- NullPointerEexception
+		     \- ClassCastException
+		     \- ArrayIndexOutOfBoundsException
+		     \- IllegalArgumentsException
+		     \- ....
+		     java.util.Scanner下nextInt方法的三个异常：
+
+		     InputMismatchException - 如果下一个标记与 
+				Integer 正则表达式不匹配，
+				或者超出范围 
+		     NoSuchElementException - 如果输入信息已耗尽 
+		     IllegalStateException - 如果此扫描器已关闭
+
+
+		\- 已检查异常
+		   Exception
+		     \- InterruptedException
+		     \- IOException
+		     \- ParseException
+		     \- ClassNotFoundException
+		     \- SQLException
+		     \- RemoteException
+		     \- ...
+
+	\- 错误(Error)	   java.lang.Error
+
+--
+java.lang.Throwable
+构造方法：
+public Throwable(String msg);
+public Throwable(String msg,Throwable cause);
+..
+常用方法：
+printStackTrace(); 打印异常的堆栈信息
+getMessage(); //返回异常提示信息，可能为""
+getCause(); //返回引用本异常的原因，可能为null
+
+--
+错误(Error)
+定义：
+用于指示合理的应用程序不应该试图捕获的严重问题
+
+错误是不好恢复的，所以，也无需捕获。
+
+常见错误：
+OutOfMemoryError
+StackOverflowError
+...
+
+--
+未检查异常和已检查异常 的区别？
+从继承结构上来区别：
+ 未检查异常直接或间接继承于 RuntimeException
+ 已检查异常直接或间接继承于 Exception
+
+从异常说明上来区别：
+ 未检查异常都是指发生在JVM内部的异常，没有超出JVM
+ 的范围，比如：数组下标越界、类型转换，...
+
+ 已检查异常都是超出来JVM的边界的，比如：
+ IO异常，
+
+--
+未检查异常 引起的主要原因是程序员编码不够谨慎，
+所以，JVM不强制要求代码中一定要处理此类异常，而
+是希望程序员编码谨慎，避免此类异常的发生。
+
+已检查异常 JVM要求程序中一定要处理的，可以使用
+try catch finally 语句块来做积极的处理方法，也可以
+使用throws 来申明抛出此异常(消积的处理方法).
+
+--
+public class TestException{
+   public void a(String str){
+	String str1;
+	try {
+	  str1 = str.substring(1,4);
+	  
+	} catch (NullPointerException e){
+           //
+	   e.printStackTrace();
+	   str1 = "没有数据";
+	} catch (ArrayIndexOutOfBoundsException e){
+	   e.printStackTrace();
+	   str1 = "数据不够4位长度."; 
+	}
+	System.out.println(str1);
+   }
+
+   public static void main(String[] args){
+	TestException te = new TestException();
+	te.a();
+   }
+}
+
+--
+try catch finally 块的使用策略
+1.一个try块后是跟多个catch还是单个catch？
+要根据实际的业务情况，如果不管出现何种情况，都
+是同一个处理方式，则只需写一个catch即可。
+如果不同的异常，有不同的处理方式，则分开catch处理。
+
+2.如果有多行代码都有可能出现异常，则是放在一个try
+块中？还是分开多个 try 块？
+要看这多行代码的调用业务是否是一个 原子操作，
+如果是，则放在一起处理，如果不是，则分开处理。
+
+--
+异常处理的原则
+1.如果你捕获了异常，而不处理/处理不了,
+  那不如不捕获
+
+2.考虑把已检查异常，转换成未检查异常。
+如：
+try {
+  ...
+} catch (Exception e){
+   throw new RuntimeException("",e);
+}
+
+--
+throws 与 throw 的区别
+throws 是在方法的定义中申明抛出的异常类型
+throw 是在方法体内抛出的异常对象。
+
+--
+自定义异常
+可以根所业务需求，自定义已检查异常或未检查异常。
+语法：
+public class 异常类名 
+	extends Exception/RuntimeException {
+   //属性
+
+   //方法
+}
+
+一般来讲，大部份自定义的异常无需提供属性，
+只需重写父类的4个构造方法即可。
+
+当然，如果你需要定义一些特殊的属性也是可行的，
+同普通的实体类一样，提供构造、get/set 方法.
+
+在项目设计中，一般会根据业务需要，自定义一些
+业务上的异常类，会把他们做成 已检查异常
+
+--
+内部类(Inner Class)
+定义，就是指在类中嵌入其它的类，就叫内部类
+它的优势：就是在内部类中可以直接访问外部类的成员。
+但是，这样，这个类内部类在很大程度上，就只能
+供它所在的外部类调用。
+
+内部类可以定义的位置主要有两处：
+1.把内部类当 成员属性 存在。
+2.把内部类定义在外部类的方法之中。
+
+所以，内部类可以分为4种：
+1.成员内部类 Member Inner Class
+  把内部类当做普通属性对待。
+public class Outer{
+  ....
+  class MemberInner{
+    //
+    ...
+  }
+
+  //外部类方法
+  ...
+}
+
+特点：
+a.直接访问外部类的所有成员（包含静态成员）
+b.需要通过 外部类名.this.属性名 
+  来访问外部类与同部类同名的属性
+
+
+2.静态内部类【嵌套类 nested class】 static Member Inner Class
+  把内部类当做静态属性对待
+public class Outer {
+   ...
+   //
+   public static class StaticNested {
+       //只能直接访问外部类的静态成员
+       ...
+   }
+   //...
+}
+
+特点：
+a.可以直接访问外部类的静态成员。
+b.由于它是静态的，在外面可以直接当“顶级类”使用。
+
+
+3.局部内部类 Local Inner Class
+  把内部类定义在外部类的成员方法之中
+public class Outer{
+   ...
+   //方法
+   public class methoda(){
+      ....
+      //
+      class LocalInner{
+	//...
+	//...
+      }	
+      new LocalInner().XxX方法;
+   }
+}
+
+特点：
+a.可以直接访问外部类的所有成员（包含静态成员）
+b.可以访问所在方法的局部变量，但要求这个局部变量
+必需是final 修饰的。
+
+
+4.匿名内部类
+  是局部内部类的一种，也就是没有名字的局部内部类。
+
+特点：
+ 同局部内部类.
+
+--
+利用内部类提供了JAVA语言多重继承的功能
+
+public abstract class Spider{
+   public abstract void run();
+}
+public abstract class Person {
+   public abstract void run();
+}
+
+//
+public class SpiderMan 
+	extends Person{
+    public void run(){
+       //两难？ 人在run？还是蜘蛛在run?
+    }
+    //定义一个内部类，来继承 Spider
+    class MySpider extends Spider{
+	public void run(){
+		//蜘蛛在run?
+	}
+    }
+
+    public void power(){
+	run();// 人的
+	new MySpider().run(); //蛛蛛的
+    }
+}
+
+--
+
+
+
+
+

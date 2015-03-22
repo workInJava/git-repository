@@ -1,0 +1,273 @@
+JAVA IO
+
+java.io.File 类
+--
+
+字节流, 用来操纵 二进制数据
+a.字节输入流
+   java.io.InputStream
+		\- FileInputStream
+		\- ByteArrayInputStream
+		\- FilterInputStream
+			\- BufferedInputStream
+			\- DataInputStream
+		\- ObjectInputStream
+		...
+b.字节输出流
+   java.io.OutputStream
+		\- FileOutputStream
+		\- ByteArrayOutputStream
+		\- FilterOutputStream
+			\- BufferedOutputStream
+			\- DataOutputStream
+		\- ObjectOutputStream
+		...
+字符流
+--
+过滤流 与 节点流
+
+节点流，就是具备底层读、写数据能力的流，具有最
+	基本的功能。
+  如：FileInputStream
+      ByteArrayInputStream
+
+过滤流，本身不具备底层读、写数据的能力，但是它
+	可以基于节点流来提供额外的功能。
+	注：过滤流不能单独构造，必需以节点流来构造。
+  如：BufferedInputStream
+      DataInputStream
+      ObjectInputStream
+
+正是基于JAVA IO的这种设计思想(装饰模式)	，使得我们
+可以根据节点流和过滤流任意配合，构建一个功能强大的
+流。
+
+如：
+构建一个带缓存能力的文件流
+String path = "xx.xxx"; //文件的路径
+BufferedInputStream bis = null;
+bis = new BufferedInputStream(
+		new FileInputStream(path));
+
+构建一个能读写对象类型的文件流
+ObjectInputStream ois = 
+	new ObjectInputStream(
+		new FileInputStream(path));
+构建一个带缓存的、能读写对象的文件流
+ObjectInputStream ois =
+	new ObjectInputStream(
+	    new BufferedInputStream(
+	       new FileInputStream(path)));
+
+注：缓存的作用就是 有效减少磁盘IO的次数。
+
+构建一个不带缓存、读写基本数据类型的文件流
+DataInputStream dis = 
+	new DataInputStream(
+		new FileInputStream(path));
+--
+
+对象的持久化(序列化)
+目的：就是保存对象的状态。
+
+对象持久化(序列化)的要求:
+
+1.对象必需实现 java.io.Serializable
+2.对象要符合 JavaBean 规范
+3.对于你不想持久化的属性，请使用 transient 
+  关键字来修饰属性。
+4.如果某个属性的类型又是自定义类型，则要求它也
+  必需是实现了 Serializable 接口的。
+  【对象的所有属性都是可序列化的】
+5.集合同样可以被序列化，只是要求此集合中的所有元
+  素都是可序列化的。
+
+--
+批注：
+JavaBean 规范
+有属性
+有getter和setter方法
+有构造
+与其它对象类可能存在的关系
+--
+
+100000 --> 写入到文件中
+   DataOutputStream中的 writeLong方法
+
+读出来：
+   DataInputStream中的 readLong 方法
+
+--
+
+字符流
+作用，用来操作文本文件的
+
+字符输入流
+java.io.Reader
+	\- FileReader
+	\- CharArrayReader
+	\- BufferedReader
+	\- InputStreamReader  [桥接器]
+	....
+
+字符输出流
+java.iot.Writer
+	\- FileWriter
+	\- CharArrayWriter
+	\- OutputStreamWriter
+	\- BufferedWriter 
+	\- PrintWriter  [自带缓存的]
+	....
+
+节点流, FileReader, CharArrayReader,
+过滤流, BufferedReader,InputStreamReader,..
+
+--
+InputStreamReader 
+是一个字节流转换成字符流的桥接器。
+如：把标准输入设备(System.in)转换成字符流
+BufferedReader br = 
+	new BufferedReader(
+		new InputStreamReader(System.in));
+读到整行：
+String line = br.readLine();//
+
+--
+读取字符数据最常用的类：
+BufferedReader
+因为此类可以 整行整行地 读取
+readLine(); //读取整行(不含 换行符)
+
+
+写字符数据最常用的类：
+PrintWriter
+因为此类可以 整行整行地 写入
+println(String line); //写入 line，含(换行符)
+
+--
+公共方法
+java.io.Reader 字符输入流
+	int read(); //读取单个字符
+	int read(char[] buf);
+	int read(char[] buf,int off, int len);
+
+	void close();
+
+java.io.Writer 字符输出流
+	void write(int c); //写入单个字符
+	void write(char[] buf);
+	void write(char[] buf, int off, int len);
+
+	void close();
+--
+练习：模拟打字
+
+
+--
+随机访问流 java.io.RandomAccessFile
+此流即可以读也可以写，而且支持任意定位。
+
+此流在构建时可以指定“模式”
+a. r  表示只读模式
+b. rw 表示读、写模式
+
+常用方法：
+long getFilePointer(); //返回文件指针指当前的位置
+void seek(long point); 
+
+....
+--
+作业：
+请从一个大型的文本文件中读取最后一行的数据。
+请用较高效的方式实现。
+
+public String readLastLine(String filepath){}
+
+--
+JAVA 反射(reflection | introspection)
+定义，
+给定一个类型，可以通过这个类型反窥本类中的所有
+成员(属性、方法),也能知道这个类型的父类型、实现
+的接口类型，也可创建此类的对象。
+给定一个对象，可以调用这个对象的任意方法。
+具备这些能力的机制叫做反射。
+
+反射的入门：
+了解 java.lang.Class 类型。
+这个类型是JVM内部用来描述 其它类型的。
+而且外部是不能直接创建 Class实例的。
+那我们如何获取类的Class实例呢？
+至少有以下几种方式：
+a).如果知道类名，则直接
+   Class<XXX> c = XXX.class;
+b).如果我们知道对象，则直接
+   Class<XXX> c = xxx.getClass();
+c).如果想得到基本类型的包装类
+   Class<XXX> c = XXX.TYPE;
+   此处的XXX,仅局限于：Byte,Integer,Short
+   ,Long,Character,Float,Double,Boolean,Void
+d).仅仅知道类的全限定名，则：
+   String str = "com.corejava.day11.FileCopy";
+   Class<FileCopy> fc = Class.forName(str);
+
+--
+不管我们创建多少个Book对象，在JVM中，只有唯一的
+Class<Book> 实例
+
+--
+RTTI，Run-Time Type Identified 运行时类型识别。
+因为JAVA语言的多态，对象有 编译时类型和运行时
+类型，所以，JVM需要利用RTTI机制来识别每个对象的
+运行时类型，并且要保证这个类型在JVM中只有一份。
+
+Object s1 = new Student();
+Object s2 = new Student();
+
+
+--
+java.lang.Class<T> 泛型类
+本类是所有被加载进JVM中的类型的描述类型，
+它可以窥探此类的中一切，也可以动态创建此类的
+对象和调用它的方法。
+
+常用方法：
+public static Class<T> forName(String name);
+...
+
+public Field[] getDeclaredFields();//获取所有属性
+public Field getDeclaredField(String name);
+
+public Method[] getDeclaredMethods();
+public Method getDeclaredMethod(String name);
+
+public Constructor[] getDeclaredConstructors();
+
+public Class<T> getSuperClass();//获取父类
+
+public Class<T>[] getInterfaces();//获取实现的接口
+
+public Package getPackage();//获取包名
+
+
+//反射API
+属性, java.lang.reflect.Field extends AccessibleObject
+方法, java.lang.reflect.Method extends AccessibleObject
+构造器, java.lang.reflect.Constructor extends AccessibleObject
+以上三个类型继承于AccessibleObject，同时，实现了
+Member接口。
+
+修饰符, java.lang.reflect.Modifier
+
+--
+
+利用反射 创建 对象
+Class<XXX> c = Class.forName("xxx.xx.xx");
+XXX xxx = c.newInstance();
+
+给此对象的属性赋值
+
+调用此对象的某个方法
+
+--
+作业：
+请在StringUtil

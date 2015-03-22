@@ -1,0 +1,336 @@
+XML, eXtensible Markup Language
+可扩展的标记语言
+同时，它还是一种元语言(Meta Language),也就是它
+可以定义其它语言，比如：Schema, XPATH 等都是利用
+XML来定义的。
+
+--
+XML语言是 W3C 组织制定并推广，它采用 标记 来组织
+和管理数据,而且 XML不依赖于任何的开发语言，是独立
+的，制定它的目的就是用来存储和交换数据的[跨语言]
+所以，XML本身就是一个“文本文件”[有特定的格式].
+
+--
+XML的语法
+与HTML差不多，也是采用 <标记名> 来描述。
+
+XML的特点：
+a).纯文本
+b).跨平台
+c).有结构的数据存储
+d).不固定的标记,非常灵活
+
+--
+如何来写一个XML文档？
+a).以 <?xml version="1.0" encoding="UTF-8"?> 开头
+b).有且仅有 一个”根标记“
+c).标记之间必需成对出现，有开始，有结束
+   <a>hello</a>
+d).标记之间不能互相嵌套，如：
+   <a><b>yes</a></b> --> error
+e).标记中可以有多个属性，属性采用 名字=值 的形式，
+   值要用双引号或单引号括起来，多个属性之间采用空格
+   隔开。
+   如：<a id="1" name="jack">....</a>
+
+--
+如：下面是一个描述学员信息的XML文档
+<?xml version="1.0" encoding="UTF-8"?>
+<students>
+  <student id="1">
+     <name>Jack</name>
+     <age>18</age>
+     <gender>男</gender>
+     <description>.....</description>
+  </student>
+  <student id="100">
+     <name>ann</name>
+     <age>17</age>
+     <gender>女</gender>
+     <description>.....</description>
+  </student>
+</students>
+
+注：满足以上要求的XML文档，
+叫做 格式良好的(Well Formed) 文档
+
+如何来验证XML文档是否是格式良好的？
+可以利用 浏览器 来进行验证。
+
+
+-- JAVA CODE:
+Student s1 = new Student();
+s1.setId(1);
+s1.setName("Jack");
+s1.setGender('男');
+s1.setDescription("...");
+
+
+
+
+HTML 与 XML 的区别？
+HTML的标记是固定的，而XML的标记是不固定的。
+HTML核心是展现数据，而XML核心是存储数据和交换数据
+
+--
+HTML，超文本标记语言
+Hyper-Text Markup Language
+HTML制定出来的目的是为了展现互联网的内容，所以，
+HTML的核心是 展现数据，而不是存储数据。
+
+要实现在互联网中展现数据，即需要W3C制定的HTML规范，
+同时，也需要各个浏览器厂商来实现这个HTML规范，
+
+所以，浏览器就是用来解析HTML标记的一个应用软件。
+HTML标记是固定的，除非升级到下一个版本，才会有
+新的标记出来，这样一来，浏览器也必需要更新。
+--
+
+练习：
+请写一个XML文档，用来描述你所玩过的游戏。
+要求：XML文档必需是格式良好的。
+
+如：
+<?xml version="1.0" encoding="UTF-8"?>
+<games>
+   <game id="1">
+	<name>传奇</name>
+	<type>多人在线游戏</type>
+	<mode>按点卡收费</mode>
+	<detail>
+	    <year>2000</year>
+	    <company>盛大</company>
+	</detail>
+   </game>
+   <game id="2">
+	<name>星际争霸I</name>
+	<type>竞技</type>
+	<mode>免费</mode>
+   </game>
+   ...
+</games>
+
+
+--
+结论：在应用系统中，XML文档光格式良好是远远不够的，
+还需要结构保持一致，含：
+  标记名一致
+  层次要一致
+  属性要一致
+  所不同的仅仅是 数据本身。
+
+--
+DTD, Document Type Definition 文档类型定义
+作用，就是用来在应用系统中限定XML文档的结构的。
+以保证在此系统中所有的XML文档都是结构良好的。
+
+所以，有了DTD之后，我们就被要求依据DTD来写XML
+文档，以满足此应用系统的要求。
+
+DTD的主要标记：
+<!DOCTYPE >  用来定义文档类型
+<!ELEMENT >  用来定义元素的
+<!ATTLIST >  用来定义属性的
+...
+
+如：
+<!ELEMENT games (game+)>
+<!ELEMENT game (name, type, mode, detail?)>
+<!ATTLIST game
+	   id CDATA #required>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT type (#PCDATA)>
+<!ELEMENT mode (#PCDATA)>
+<!ELEMENT detail (year, company)>
+<!ELEMENT year (#PCDATA)>
+<!ELEMENT company (#PCDATA)>
+
+--
+命名空间 NameSpace
+作用，用来避免命名冲突的
+语法，
+<[prefix:]元素名 xmlns[:prefix]="URL">
+
+如：
+<games xmlns:g="http://www.szedu.com/1"
+	xmlns="http://www.sztz.org">
+  <game id="1">
+     <g:name>...</g:name>
+     <type>...</type>
+     <mode>...</mode>
+     <detail>
+	<name>...</name>
+	<year>...</year>
+     </detail>
+  </game>
+</games>
+
+注：如果xmlns后面不带前缀，则表示定义默认命名空间，
+默认命名空间会自动用在定义此命名空间的元素及它的
+所有子元素中。
+
+--
+Schema
+作用与DTD是一样的，它的出现就是为替代DTD而来的。
+
+Schema与DTD的对比：
+DTD的局限性
+a.不支持XML语法
+b.数据类型有限，不能自定义类型
+c.不支持扩展
+Schema 解决了DTD的所有局限性，并且具备：
+a.Schema完全来自于XML，它的语法就是XML的语法
+b.Schema中内置了大量的数据类型，而且支持自定义
+c.Schema扩展性较好。
+
+--
+注：
+schema是用XML定义的，但是，SCHEMA中的元素是固定的
+如：它的根元素是
+<xs:schema 
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="http://www.szedu.com/jsd1307/xml">
+
+或：
+<schema
+   xmlns="http://www.w3.org/2001/XMLSchema"
+   targetNamespace:tns="http://www.szedu.com/jsd1307/xml">
+--
+常见的 Schema元素有：
+<schema>
+<element>
+<attribute>
+<complexType>
+<simpleType>
+<sequence>
+....
+
+--
+以 games_0_1.dtd 为依据，写一个schema
+
+<schema
+   xmlns="http://www.w3.org/2001/XMLSchema"
+   targetNamespace:tns="..."
+   ....>
+   
+   <element name="games">
+	<complexType>
+	   <sequence>
+	      <element name="game" type="GameType"/>
+	   </sequence>
+	</complexType>
+   </element>
+   <complexType name="GameType">
+	<sequence>
+	   <element name="name" type="string"/>
+	   <element name="type" type="string"/>
+	   <element name="mode" type="string"/>
+	   <element name="detail" type="Dtype"/>
+	</sequence>
+	<attribute name="id" type="integer" 
+		use="required"/>
+   </complexType>
+   <complexType>
+	<sequence>
+	   <element name="year" type="integer"/>
+	   <element name="company" type="string"/>
+	</sequence>
+   </complexType>
+</schema>
+
+--
+XML 的解析
+在JAVA中，有专门的用来解析XML文档的API, SUN公司
+统一称之为：JAXP
+JAXP,Java Api for XML Processing/Parser
+
+JAXP中有两种实现方式：
+一、 SAX, Simple Api for XML
+基于事件驱动的方式来解析XML，优点是：
+高效、快捷，不占用资源。
+缺点：不暂存结果，每次都是从头到尾解析完。、
+所以，SAX不支持修改XML数据。
+	
+二、 DOM, Document Object Model
+是一次性把整个XML文档加载进内存，形成一颗倒置
+的”文档树“，然后提供相关的方法来让程序操作这个
+”文档树“。
+优点：支持更改、删除等操作，而且随时可以访问。
+缺点：占用内存较大，率效不高。
+
+--
+JAXP 的API
+javax.xml.parsers包
+	SAXParserFactory
+	SAXParser
+	
+	DocumentBuilderFactory
+	DocumentBuilder
+
+--
+使用DOM解析XML 的流程
+1.通过抽象工厂来实例化自己
+DocumentBuilderFactory fac = 
+	DocumentBuilderFactory.newInstance();
+2.通过抽象工厂来创建抽象产品
+DocumentBuilder builder = 
+	fac.newDocumentBuilder();
+3.调用 builder的 parse方法来加载整个XML文档
+InputStream in = new FileInputStream(xmlpath);
+Document doc = builder.parse(in);
+
+--
+W3C的DOM模型
+包：
+org.w3c.dom
+常用的接口：
+Node  节点，DOM中，一切皆是节点
+  Document 代表文档，其实就是指向”树根“
+  Element  代表标记(元素),
+  CharacterData
+	\-Text	 代表两个元素中间的文本
+	\-Comment 代表文档注释
+  Attr   代表元素中的属性
+  ....
+
+公共操作
+getNodeName()
+getNodeValue()
+getChildNodes();
+getParentNode();
+getNextSibling();
+getPreviousSibling();
+....
+
+Document中的操作：
+  getDocumentElement(); //获取根元素
+  getElementsByTagName(String tagName);
+  
+Element中的操作
+  getElementsByTagName(String tagName);
+
+...
+
+--
+作业：
+1.根据 books.xml 文档写出两个实体类，属性与XML
+的标记保持一致。
+Book
+BookInfo
+
+2.利用DOM 方式来解析 books.xml文档，获取一个List
+
+方法申明如下：
+public static List<Book> parseXml(String xmlpath){
+   ....
+}
+
+
+
+
+
+
+
+
+
+

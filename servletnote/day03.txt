@@ -1,0 +1,79 @@
+Session 的会话跟踪:
+    1,根据cookie,在创建session的时候,把生成的sessionID
+    放到cookie里,这样用户下次访问,session会从cookie里
+    读取sessionId,来辨别是哪一个用户
+    2,利用URl来传sessionId,xxxxx&sessionId=sessionid
+    
+Servlet的路径匹配
+      匹配模式            含义              例子
+    1,确切路径匹配      服务于某个servlet    /login  /user/login
+    2,模糊匹配          服务于一组Servlet    /*   /user/*
+    3,后缀名匹配        服务于一组有特定后缀名的servlet   *.do  *.action
+
+	如果我们的路径匹配有以后缀名结束的,哪就不能有 "/"
+
+初始化参数:
+<init-param>
+	<param-name>email</param-name>
+	<param-value>wuguangdong777@163.com</param-value>
+</init-param>
+利用ServletConfig 对象获取的getInitParameter获取
+
+<load-on-startup>1</load-on-startup>
+如果给servlet配置这个标签 说明这个servlet在服务启动的时候
+就加载,中间的值 有1.2.3.4.5 数字越小越优先加载 如果几个servlet
+数字相同,服务器根据自己的选择区加载
+
+ServletContext
+     是存在服务器端的一个内存空间,相对于整个web应用
+     也就是说每一个web应用都有一ServletContext对象
+      //获取初始化参数	
+     getInitParameter(java.lang.String name)
+     //给servletContext赋值
+     setAttribute(java.lang.String name, java.lang.Object object)
+     //获取到servletContext里的值
+     getAttribute(java.lang.String name)
+     //删除servletContext里的值
+     removeAttribute(java.lang.String name) 
+ 功能:可以在整个web应用中共享数据
+      注意-->servletContext在内存里,使用时要注意内存
+
+
+ HttpServletRequest:
+	获取客户端的请求数据
+	http://localhost:9000/ServletDemo/context1
+	协议     主机    端口  web应用名称  路径信息
+
+  1,获取协议 getProtocol()
+  2,获取主机名 getServerName()
+  3,获取端口号 getServerPort()
+  4,获取web应用路径 getServletPath()
+  5,获取路径信息 getPathInfo() (只有路径匹配是模糊匹配才会有值)
+
+
+  a,如果说我们是确切路径和后缀名匹配,你的访问路径是什么就是什么
+  servletPath 也是你配的路径
+  b,在模糊匹配中servletPath是 * 号的内容 
+  如果没有非*号内容  返回是一个空串
+  c,在确切路径和后缀名匹配中 pathInfo是null值
+  d,在模糊匹配中,访问路径有*号内容则pathInfo为
+  该*好内容,如果访问路径没有*号内容,pathInfo为null
+   
+   
+   //取得request里的值 按名称取
+  getAttribute(java.lang.String name) 
+  //获取请求的参数值
+  getParameter(java.lang.String name)  
+   //获取参数值 获取url或form表单里 属性名称相同
+   相同的一组值 返回一个String[]
+   getParameterValues(java.lang.String name) 
+//获取客户端访问的IP
+getRemotePort()
+  //设置request的值 key -- value
+  setAttribute(java.lang.String name, java.lang.Object o)
+  //获得session
+  getSession() 
+
+
+
+ 

@@ -1,0 +1,446 @@
+coreJava: (算法)
+数据库:(存贮数据)
+-----------------------------------
+基本的概念:
+数据库(Database):存放数据的磁盘;
+数据库管理系统(database management system):
+			管理数据的一个软件系统
+
+市面上常见的数据库管理系统有哪些?
+sql server /oracle/mysql/DB2
+
+SQL(structure query language)结构化查询语言
+它是操作数据库管理系统的一个标准:主要对数据库
+进行CRUD(
+	create:创建:
+	delete:删除:
+	update:修改:
+	retrieve:检索;
+)
+的操作,数据库的运算都是通过SQL来完成的;
+市面上的主流数据库都遵守SQL规范:
+注:不同的数据库对SQL的支持又有些不同;
+
+sql根据命令功能的不同分为5个部分:
+1.DCL(data control language)数据操作语句:
+	grant  ,revoke
+2.DDL(data definition language)数据定义语句:
+	create ,alter,drop,rename to...
+3.DML(data manipulating language)数据操纵语句:
+	insert ,update,delete
+4.DQL(date query language)数据查询语句:
+	select
+5.DTL(data transaction language)数据事务语句:
+	commit , rollback, savepoint
+-----------------------------------------------
+oracle www.oracle.com  11G
+
+输入口令:root
+
+安装注意点: 目录中不能由中文:建议把防火墙和360一些
+安全软件关闭;
+
+oracle 数据库有服务端和客户端组成:
+服务端:有服务器进程,后台进程,监听器和数据库组成;
+
+客户端:有多种:1.oracle自带一个客户端:sqlplus
+		启动:运行cmd 打开cmd命令窗口输入sqlplus
+	       2.pl/sql developer 第三方;
+	       3.sql developer 有oracle自己开发的 
+	       使用的是java语言,需要JDK的支持,
+---------------------------------------------------
+创建用户 2步骤:
+1.创建一个(普通)用户:
+	语法:create user 用户名 identified by 密码:
+	例如:创建一个jsd1307/jsd1307的用户
+	create user jsd1307 identified by jsd1307;
+2.授权给一个用户:
+	角色:oracle中内置了3个角色:
+DBA:  系统管理权限;
+connect:  创建会话连接权限;
+resource: 操作基本数据库对象的权限;
+	例如:给jsd1307赋予connect和resource角色;
+	grant connect,resource to jsd1307;
+
+修改密码: alter user jsd1307 identified by aaa;
+
+删除用户: drop user jsd1307;
+
+---------------------------------------
+sqlplus中常用的一些命令:
+
+1.conn 用户名/密码; //切换用户
+2.show user;         //显示当前登录的用户名
+3.start | @ *.sql路径: //执行数据库脚本
+数据库脚本:用于创建数据库对象的语句的集合;
+目的:在数据库中创建存贮数据的表格
+			并在表格中初始化数据
+
+例如:start D:/oracle_cn.sql;
+4.查看表格结构:
+desc 表的名字:
+例如:
+desc s_emp; 这是sqlplus的命令 不是sql的命令
+
+5.清屏: clear screen;
+
+6.历史回忆;
+	方向键上下;
+
+-----------------------------------------
+基本查询:
+
+表格(table):它是由行(rows)和列(column)
+				组成的二维空间
+它是数据库存贮数据的基本单位,将来我们的数据就是
+存贮在表中;
+
+查询的本质:
+1.要查什么:
+2.取哪里查:
+语法: select 列名 from 表格名:
+例如:-- 从s_emp表中查询出员工的名字,薪水,职位;
+ select first_name,salary,title from s_emp;
+-- 从s_emp表中查出员工的姓氏,名字;
+ select last_name,first_name from s_emp;
+-- 找出员工的所有的信息;
+ select * from s_emp;
+-- 找出本公司的所有的职称(title);
+
+排重: distinct
+ select distinct title from s_emp;
+-------------------------------------
+sql还具有运算的能力
+-- 从s_emp表中查出员工的姓名;
+select last_name||' '||first_name from s_emp;
+
+
+列的数据类型:
+1.数字类型 *可以做所有的数学运算*
+  number     number(4) 代表整数 最大能存9999
+	     number(7,2) 代表double类型  整数长度为5 小数位为2.
+2.字符型  *可以做拼接的运算* 注:字符串在数据库中用'';
+  varchar2(20) 代表字符串最长为20;
+  char(20)     代表定长20;
+3.日期类型: *可以做加 减运算*
+  Date			
+  Timestamp
+
+4.大数据类型
+  clob character large object 字符型对象 最大可存2G
+  blob binary large object 二进制对象 最大可存2G
+注:大数据类型不支持查看结果:
+------------------------------------------------
+--查询所有员工的名字,年薪(不考虑提成)
+select first_name "名 字",12*salary "年 薪" from s_emp;
+  ""的作用给我们的查询出的列起个别名 并保持格式
+  别名不一定需要"";如果要保持格式 必须有""
+
+--查询所有员工的名字,年薪(考虑提成)
+select first_name,12*salary*(1+nvl(commission_pct/100,0)) from s_emp;
+
+null和所有的值进行运算最后都为null;
+空值置换函数nvl(commission_pct/100,0)
+如果commission_pct/100的值为null 则表达式的值为0
+如果commission_pct/100的值不为null 
+		则表达式的值为commission_pct/100
+注:nvl()中的两个值要为同一数据类型
+
+
+-- 从s_emp表中查出员工的姓名;
+select last_name||' '||first_name from s_emp;
+
+--字符串拼接(***是**入职的,工资是***,职称是***)
+select first_name||'是'||start_date||'入职的,工资是'||salary||',职称是'||title "员工的描述" from s_emp;
+
+----------------------------------------------
+条件查询:
+where字句用来过滤查询的数据:
+--查出工资高于1500的员工的信息;
+select * from s_emp where salary > 1500;
+
+出现在where后面的运算符有:
+1.比较运算符:
+ > , < , >= , <= , =  , != ^= <>
+
+--查出在41部门的员工名字,工资;
+select first_name,salary from s_emp where dept_id = 41;
+
+2.逻辑运算符:
+and   
+or
+not
+--查出41部门工资高于1200的员工名字,工资;
+select first_name,salary from s_emp
+where dept_id = 41 and salary > 1200;
+
+--查出在41,50,42部门的员工名,薪水;
+select first_name,salary from s_emp
+where dept_id = 41 or dept_id = 50 or dept_id = 42;
+
+3.其他运算符:
+in(list)
+not in()
+between and
+is null
+is not null
+模糊匹配:like
+通配符:
+	_ 通配任意单个字符
+	% 通配任意多个字符
+
+--查出在41,50,42部门的员工名,薪水;
+select first_name,salary from s_emp
+where dept_id in(41,50,42);
+
+--找出工资在1200到1500之间的员工名
+select first_name,salary from s_emp
+where salary between 1200 and 1500;
+
+--找出工资大于1500并且没有提成的员工;
+select first_name,salary,commission_pct from s_emp
+where salary > 1500 and commission_pct is null;
+--查出名字是以M打头的员工;
+select first_name from s_emp
+where first_name like 'M%';
+
+--查出姓名中第三个字母是e的员工;
+select first_name from s_emp
+where first_name like '__e%';
+
+如果我们要通配的字符中本身就有_或%,则
+需要通过关键字escape来转义;
+select first_name from s_emp
+where first_name like '\_%' escape '\';
+
+排序字句:
+order by 列名 asc(升序)默认 | desc (降序)
+select first_name,salary from s_emp
+where salary between 1200 and 1500 order by salary desc,first_name desc;
+
+--找出6月份入职的员工全名,工资,职称,
+				并按工资降序排序
+select last_name||' '||first_name "全名",salary,title,start_date
+from s_emp where start_date like '%6月%' order by salary desc;
+--查询出职称中带VP的员工名字,工资,
+				并按工资的降序排序
+select first_name,salary,title from s_emp
+where title like '%VP%' order by salary desc;
+--查询出年薪低于25000的员工名,职称,并按年薪升序
+					排序
+select first_name,title,12*salary*(1+nvl(commission_pct/100,0)) 
+from s_emp where 12*salary*(1+nvl(commission_pct/100,0)) < 25000
+order by 12*salary*(1+nvl(commission_pct/100,0));
+-----------------------------------------------
+dual是一张虚拟的表格,没有任何的意义
+只是为了充当构建完整的select 语句
+
+单行函数(single function):
+多行函数(组函数)
+oracle中提供了大量的函数
+处理方式的不同分为:
+1.数字函数:
+round() 四舍五入
+trunc() 直接截取
+mod()   取余
+select round(3.1415926,3) from dual;
+select trunc(3.1415926,3) from dual;
+select mod(10,3) from dual;
+
+
+2.字符函数
+length()求字符长度  oracle  数据库管理系统视一个汉字为1
+select length('中国') from dual;
+例如:查出名字长度小于5的员工;
+select first_name from s_emp
+where length(first_name) < 5;
+----
+upper()将字符串都改为大写
+lower()将字符串都改为小写
+initcap()将字符串每个单词首字母都改为大写
+select upper(first_name) from s_emp;
+-----
+
+rpad(str1,length,str2)右边填充 在str1右边填充str2 
+			以达到length长度
+lpad()左边填充
+select rpad('abc',6,'de') from dual;
+-----
+
+rtrim(str1,str2)从右边截掉指定的字符
+select rtrim('abcdefefefaefef','fea') from dual;
+从右边截取字符串,根据str2中有的字符将str1
+	从右向左开始截取直到str1中没有的字符
+ltrim()
+------
+substr()
+  select substr('hello world!',3,7) from dual;//llo wor
+  *注:数据库中字符串index是以1开始计数的;
+
+
+<--------------没看懂--------------->
+instr()
+ select instr('go,go,quickly!','go') from dual;
+ select instr('go,go,quickly!','go',2) from dual;
+ select instr('go,go,quickly!','go',-1) from dual;
+ select instr('go,go,quickly!','go',-1,2) from dual;
+<--------------没看懂--------------->
+
+
+
+-----
+replace()
+ --select replace('hello world!','o','*') from dual;
+translate()
+ 
+ --select translate('abcdefcba','abc','123') from dual;
+ --select translate('I09 li3ke you',
+ 'abcdefghijklmnopqrstuvwxyz0123456789',
+ 'abcdefghijklmnopqrstuvwxyz') from dual;
+-----
+
+decode()比较第一和第二个参数
+如果相等取第三个参数
+如果不相等取第四个参数
+	select decode(1,1,2,3) from dual;//2
+	select decode(1,2,2,3) from dual;//3
+case when 可以把它看成switch功能:
+select name "部门名",
+case region_id
+     when 1 then '北美'
+     when 2 then '南美'
+     when 3 then '中东/非洲'
+     when 4 then '亚洲'
+     when 5 then '欧洲'
+     else '未知区域'
+end "区域名"
+from s_dept;
+练习:
+--查出客户表(s_customer)中phone列
+			最后一个-线后面的部分;
+select phone,substr(phone,instr(phone,'-',-1)+1) from s_customer;
+--把图片表(s_image)中文件名(filename)
+				列中后缀给查出来;
+select filename,substr(filename,instr(filename,'.',-1)+1) from s_image;
+--模拟向银行中只显示姓名的第一个字符
+				(奥巴马变成奥**):
+select first_name,
+translate(first_name,substr(first_name,2),rpad('*',length(first_name),'*'))
+from s_emp;
+--请把员工的工资分为3等,超过2000元的为高等
+		在1500和2000之间的为中等
+		低于1500的为低等
+select first_name,
+case 
+	when salary > 2000 then '高等'
+	when salary between 1500 and 2000 then '中等'
+	when salary <1500 then '低等'
+	else '未分等级'
+end "工资等级"
+from s_emp;
+
+3.日期函数
+oracle 默认的日期格式为 dd-MON-yy
+select sysdate from dual;//查看数据库当前的时间;
+dd表示2位数的日;
+mon代表月份 如:6月
+mm代表2位数的月 如:06
+yyyy代表4位数年份
+HH24/HH 代表小时
+mi代表分钟
+ss代表秒
+fm表示去掉前面的0  如:fm 06 以后值6
+day  表示星期几
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<-----------------没看------------------->
+修改当前会话语言环境:
+alter session set nls_language = 'american';
+alter session set nls_language = 'simplified chinese';
+
+修改当前会话日期的格式
+alter session set nls_date_format = 'yyyy-mm-dd HH24:mi:ss day';
+
+sysdate 返回当前的时间
+months_between(date1,date2) 计算date1和date2之间的相隔的约束,
+add_months(date1,4) 在date1的基础上加4个月
+next_day(date1,星期几)计算date1下个星期几的日期
+last_day(date)计算date这个月的最后一天的日期
+
+select next_day(sysdate,'星期四') from dual;
+
+找出员工的工作月数:
+select first_name,months_between(sysdate,start_date) from s_emp;
+
+计算一年前,当前,一年后的时间:
+select add_months(sysdate,-12),sysdate,add_months(sysdate,12) from dual;
+
+当前日期中的最后一天;
+select last_day(add_months(sysdate,-6)) from dual;
+
+
+4.转换函数
+to_number(char)
+to_char(number,'fmt')
+
+to_date(char,'fmt')
+to_char(date,'fmt')
+
+select to_number('123') from dual;
+select to_date('1986-04-13','yyyy-mm-dd') from dual;
+
+--把数字格式化为字符串的时候可以用的一些符号:
+ 9  代表任意的数据
+ L  代表本地的货币符号
+ $  代表美元
+ 0  代表0
+ .  代表.
+ ,  代表,
+
+
+格式化输出员工的工资($1,500,00)
+
+select first_name,to_char(salary,'$9,999.99') from s_emp;
+
+练习:
+--把员工的入职日期格式化为年/月/日
+select first_name,to_char(start_date,'yyyy/mm/dd') from s_emp;
+
+--找出5月份入职的员工;
+select first_name,start_date from s_emp 
+where to_char(start_date,'fmmm') = '5';
+
+--找出当月入职的员工;
+select first_name,start_date from s_emp
+where to_char(start_date,'fmmm') = to_char(sysdate,'fmmm');
+
+--查询出员工的姓名,入职日期,并按日的升序排序;
+select first_name,start_date from s_emp
+order by to_number(to_char(start_date,'fmdd'));
+
+
+
+
+<------------------------------结束------------------------------->
+
+
+
+
+
+
+
+

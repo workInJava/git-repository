@@ -1,0 +1,27 @@
+作业一:  
+class Purcase{ //购买类
+	private String brand; //品牌
+	private String name; //产品名
+	private double cost; // 费用
+}
+
+有集合map存放了如下数据:
+List list = new ArrayList();
+Purcase p1 = new Purcase("宝洁","洗手粉",18.5);
+Purcase p2 = new Purcase("联合利华","肥皂",4.5);
+Purcase p3 = new Purcase("宝洁","牙膏",32.5);
+Purcase p4 = new Purcase("宝洁","毛巾",14.5);
+Purcase p5 = new Purcase("洁利","洗面奶",26.0);
+Purcase p6 = new Purcase("好迪","洗发水",27.5);
+Purcase p7 = new Purcase("多芬","沐浴露",38.5);
+Purcase p8 = new Purcase("宝洁","洗洁精",3.4);
+
+list.add(p1);
+list.add(p2);
+....
+
+要求:写一个程序,打印出各品牌所花费的总费用.
+[可选,排好序后再打印输出,按花费总费用的降序排序]
+
+
+

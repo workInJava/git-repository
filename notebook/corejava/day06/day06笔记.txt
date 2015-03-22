@@ -1,0 +1,317 @@
+Object 类
+--
+常用方法
+1. toString(), 此方法的作用是把对象的必要属性按照
+   一定的格式拼接成字符串，并返回。
+   默认实现：把对象的内存地址转换成16进制形式返回.
+   public String toString() {
+	//按自己想要的格式拼接字符串
+		
+	//第一种方法：耗时较长
+	String str = "姓名："+name+",年龄："+age;
+	return str;
+		
+	//第二种方法：toString方法
+	StringBuilder builder = new StringBuilder();
+	builder.append("姓名:").append(name).
+		append(",年龄:").append(age);
+	return builder.toString();
+   }
+
+2. equals(Object other), 此方法用来比较当前对象与
+   other对象是否"相等"。
+   默认实现：是比较地址，也就是通过 == 运算符来
+   比较。
+
+所以，如果要实现自己的比较规则，则应该重写
+equals方法。
+注：重写equals方法应该遵守以下规则：
+1.自反性, 就是自己与自己一定是相等的。
+2.对称性，就是x.equals(y)为true，则y.equals(x)也一定为true
+3.传递性，就是x.equals(y)为true, y.equals(z)为true，则x.equals(z)也为true.
+4.一致性，在属性没有修改的情况下，调用equals方法的结果不会变。
+
+写代码步骤如下：
+public boolean equals(Object other){
+  //先做非空判断
+  if(other == null){
+	return false;
+  }
+  //自反性和对称性 判断
+  if(this == other){
+	return true;
+  }
+  //判断类型是否一致
+  if(getClass() != other.getClass()){
+	return false;
+  }
+  //强制类型转换
+  XXX x = (XXX)other;
+  //比较你所关心的属性值。
+  ....
+}
+
+3. hashCode 方法
+   此方法的作用主要是用来提高某些底层采用哈希
+   算法的“容器”的性能的。
+   默认实现：是根据对象的内部地址转换成整数。
+
+hashCode方法应该与 equals方法协作一致。
+主要表现在以下2点：
+a.如果两个对象相同(equaus方法返回true)，则两个
+  对象的hashCode值一定相同。
+
+b.如果两个对象不同(equals方法返回false),则两个
+  对象的hashCode值尽最大的努力保证不同。
+
+如：
+public int hashCode(){
+   //根据equals方法中使用的属性来确定。
+
+}
+
+结论：自定义的实体类，尽可能地重写
+       equals方法和hashCode方法。
+
+--
+4. getClass 方法,
+   返回对象的运行时类型。
+
+如要获取某个对象的运行时类型，则：
+   xxx.getClass() 方法即可。
+或者，如果你有了类名，则直接可以：
+   类名.class 也可以获取这个类的Class实例
+
+java.lang.Class 类
+这个类是用来描述类型的类型。
+也就是，任何的类被加载进JVM后，都是Class的实例。
+
+而且，一个类型不管创建多少个对象，它的Class的实
+例是唯一的。
+如：
+Student s1 = new Student();
+Student s2 = new Student();
+System.out.println(s1.getClass()==s2.getClass());
+System.out.println(s1.getClass()==Student.class);
+Book s3 = new Book();
+System.out.println(s1.getClass()==s3.getClass());
+System.out.println(s3.getClass()== Book.class);
+
+--
+5. finalize() 方法
+   作用，在对象没有引用指向时，JVM的GC要回收此对象
+   之前调用此方法。
+   它的本意是想在对象被销毁之前，做一些收尾性的工作。
+   但是，由于JVM的GC运行的时机不确定，所以，这个方法
+   的作用不大。
+  
+注：
+JVM进程启动后，会先创建一个 main 线程，来负责
+执行 main 方法,同时，也会创建 gc守护线程(后台)，
+负责做对象空间的回收。
+如果，某个对象重写了 finailize方法，则当我们
+在运行 gc 程序时，JVM会使用 Finalizer 线程去调用
+对象的finailize方法。
+
+--
+Object小结：
+  toString  [需要重写]
+  equals    [需要重写]
+  hashCode  [需要重写]
+  getClass  [不要重写]
+  finalize  [可以考虑]
+
+  clone() 方法
+  这个方法默认只做 浅拷贝
+
+浅拷贝 是指只负责把属性的值copy到新对象中。
+       如果属性又是对象类型，则新对象与原对象
+       将共享此属性。
+       String,Date 这两个类型除外。
+
+深拷贝 不管属性是否是对象类型，新对象都不会与
+       原对象共享任保数据。
+
+深拷贝需要程序员自己实现。
+要求，
+1.我们的类要实现 java.lang.Cloneable 接口。
+2.要重写 Object类中的 clone 方法。
+
+--
+java.lang.CharSequence 接口
+		\- String 实现类
+		\- StringBuffer  实现类
+		\- StringBuilder 实现类
+--
+String 类
+字符串类型 是对象类型，可以把它理解成字符序列。
+实事上，它确实实现了 CharSequence 接口。
+
+创建String对象有：
+1.使用 new 运算符
+  如：String str = new String("hello");
+
+2.直接使用字面量
+  如：String str = "hello";
+
+而且我们应该尽可能地使用第2种方案，因为这种方式
+使用了"串池"技术，它可以大大提高 字符串的使用。
+如：
+  String s1 = "Jack";
+  String s2 = "Jack";
+
+  System.out.println(s1 == s2); //true;
+
+  String s3 = new String("Jack");
+  String s4 = new String("Jack");
+  System.out.println(s3 == s4); //false
+
+--
+字符串是不可变的。
+因为，字符串的底层实现是采用 char[] 来实现的。
+而且String类又是一个 final 类。
+
+String str = "Hello"; //相当于它的底层申请一个
+			//长度为5的char数组
+			//char[] data = new char[5];
+str += ",world";// str => Hello,world
+    //以上的操作会产生临时对象。
+
+--
+String str = "a"+"b"+"cd"+"ef"+"n";
+//请问此处共创建过多个对象？
+
+--
+使用 StringBuilder 来做字符串的拼接。
+此类采用缓存技术，可以有效地大大提高字符串拼接
+的效率，而且大量减少临时对象的产生。
+
+每个字符串生成器都有一定的容量。
+只要字符串生成器所包含的字符序列的长度没有超出此容量，
+就无需分配新的内部缓冲区。如果内部缓冲区溢出，则此容量自动增大。
+
+public StringBuilder(int capacity)
+构造一个不带任何字符的字符串生成器，其初始容量由 capacity
+参数指定。 
+
+
+--
+作业，利用数组实现一个MyList的数据结构
+制定接口如下：
+public interface MyList{
+   
+   /**********
+    * 添加数据到此“容器”
+    */
+   void add(int data);
+   
+   //从容器中移除数据
+   void remove(int data);
+   
+   //获取此容器中有效元素的个数
+   int size();
+
+   //根据下标获取指定的元素
+   int get(int index);
+
+   //输出容器中所有元素
+   void output();
+}
+
+-- ---------------------------------
+数字相关的类型
+java.lang.Number  [抽象父类]
+	   \- Integer
+	   \- Long
+	   \- Short
+	   \- Byte
+	   \- Float
+	   \- Double
+	   \- java.math.BigInteger  [大整数]
+	   \- java.math.BigDecimal  [大浮点数]
+
+
+基本类型的包装类型[JDK5.0之后才有的]
+ byte		java.lang.Byte
+ short		java.lang.Short
+ int		java.lang.Integer
+ long		java.lang.Long
+ float		java.lang.Float
+ double		java.lang.Double
+
+ boolean	java.lang.Boolean
+ char		java.lang.Character
+
+在JDK5.0之后，基本类型与包装类之间可以自动解封箱。
+auto boxing: 自动封箱，就是指基本类型可以自动转换成对象类型。
+如：int i = 100;
+    Integer i2 = i; //ok
+    Integer i3 = 200; //ok
+    Integer i4 = new Integer(200); //ok
+
+auto unboxing: 自动解箱，就是指对象类型可以自动转换成基本类型。
+如：
+Integer a = new Integer(10); //
+int i = a; // auto unboxing
+int j = a.intValue(); // 正规写法
+
+--
+基本类型、对象类型、字符串形式 三者之间的 转换：
+
+字符串形式转换成对象类型：
+String str = "10245";
+Integer i = new Integer(str);
+或
+Integer j = Integer.valueOf(str);
+
+把字符串形式转换成基本类型
+int a = Integer.parseInt(str);
+long b = Long.parseLong(str);
+
+基本类型转换成字符串
+int i = 100;
+String str = String.valueOf(i);
+
+--
+利用大整数来计算大数的阶乘
+常用方法：
+public BigInteger add(BigInteger val);
+public BigInteger subtract(BigInteger val);
+...
+
+
+//普通精度的阶乘
+public long factor(int num){
+   long result = 1L;
+   for(int i=num;i>=1;i--){
+	result *= i;
+   }
+   return result;
+}
+
+//递归方法
+就是指方法中调用自己。
+递归的前提：
+1.一定要有退出的条件
+
+所以，上面的方法改成递归如下：
+public long factor(int num){
+   //指定退出条件
+   if(num == 1){
+	return 1L;
+   }	
+   return num * factor(num - 1);
+}
+
+--
+格式化数字
+java.text.NumberFormat类
+此类是一个抽象类。
+
+常用方法：
+public static NumberFormat getInstance();
+getPercentInstance();
+getCurrencyInstance();
+...
+
+--

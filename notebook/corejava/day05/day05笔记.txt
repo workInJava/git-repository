@@ -1,0 +1,382 @@
+多态的应用：
+1.变量的编译时类型尽可能地写父类
+  如：
+  Animals c = new Cat();
+
+2.方法的返回类型尽可能地写父类。
+  如：
+  public Vehicle getVehicle(int type){ ... }
+
+  是一种“工厂”思想的体现.
+
+3.方法的参数尽可能地写父类。
+  如：
+  public void goHome(Vehicle v){ ... }
+  
+  是一种“回调”思想的体现
+
+--
+抽象类[abstract class]
+语法：
+public abstract class 抽象类名{
+   //属性
+
+   //方法
+}
+
+抽象类的特点：
+1.抽象类单继承
+2.有普通属性、普通方法、有构造方法
+3.抽象类可以没有抽象方法，但是 有抽象方法的类
+  一定是抽象类。
+4.抽象类不能实例化.
+5.抽象类设计的本质就是要被继承的。
+6.继承抽象父类的子类必需要实现所有的抽象方法，
+  否则，子类还将是抽象类。
+
+--
+抽象方法的语法：
+public abstract 返回类型 方法名();
+
+注：抽象方法没有方法体，直接以;号结束。
+
+如：
+public abstract class Shape{
+  
+  public abstract double area();
+  public abstract double girth();
+}
+
+//子类一
+public class Circle extends Shape{
+   //属性
+   private double radius;
+
+   //重写父类的抽象方法
+   public double area(){
+      return Math.PI * radius * radius;
+   }
+   ...
+}
+
+--
+简单工厂模式
+目的：用统一的方式创建某一类型的具体实例。
+应用场景：需要获取某一类型的不同实现。
+实现方式：
+ 1. 提供静态方法，返回具体的实例。
+
+如：
+public class XXXFactory{
+   
+   public static XXX getInstance(){
+	return new XXXSub();
+   }
+}
+
+一般来说，工厂就要是针对 业务类。
+而不是实体类。
+
+如：
+public abstract class Hello{
+   public abstract void sayHello(String name);
+}
+
+或：
+public interface Hello{
+   public abstract void sayHello(String name);
+}
+public class SimpleHello extends Hello (或 implements Hello){
+   //重写 sayHello方法
+   @Override
+   public void sayHello(String name){
+	System.out.println("Hello,"+name);
+   }
+}
+//提供一个简单工厂类
+public class HelloFactory{
+  public static Hello getInstance(){
+	return new SimpleHello();
+  }
+}
+
+//客户端：[尽量做到不与具体的实现类打交道]
+...
+Hello h = HelloFactory.getInstance();
+h.sayHello("jack");
+
+--
+JRE中常见的抽象类与子类
+java.util.Calendar [抽象父类] 
+	  \- java.util.GregorianCalendar
+java.lang.Number  [抽象父类]
+	  \- java.lang.Integer
+	  \- java.lang.Byte
+	  \- java.lang.Double
+	  \- java.lang.Float
+	  \- ...
+--
+abstract 修饰符不能与哪些修饰符同用？
+与 final 不能同用。
+与 private 不能同用。因为private方法，子类不能访问。
+与 static 不同能用。
+因为静态方法没有多态性，而abstract方法被子类重写
+的目的就是实现多态性，所以，它们矛盾。
+
+如：
+
+--
+模板模式(Template)
+目的：按统一的调度来执行具体的方法
+应用场景：按固定的规则执行处理业务
+实现：利用抽象类来定义各种不同业务，同时，也会
+实现一个固定的规则来调用这些不同的业务。
+
+如：
+小品的模板：
+1.只有是小品，就有：报幕、叙事、煽情、结束
+  四个部份，但是，不同的小品，这四个部份实现
+  不一样。那么，我们可以定义一个小品的模板类如下：
+
+public abstract class 小品{
+   //定义一个模板方法，规定业务的执行规则
+   public final void play(){
+      //1.报幕
+      报幕();
+      //2.叙事
+      叙事();
+      //3.煽情
+      煽情();
+      //4.结束
+      结束();
+   }
+   //抽象方法
+   public abstract void 报幕();
+   public abstract void 叙事();
+   public abstract void 煽情();
+   public abstract void 结束();
+}
+
+--具体的小品
+public class 不差钱 extends 小品{
+   //有自己的属性
+   //实现所有的抽象方法
+   public void 报幕(){ ... }
+   public void 叙事(){ ... }
+   public void 煽情(){ ... }
+   public void 结束(){ ... }
+}
+
+--
+练习：
+把模板模式和简单工厂模式配合起来使用，
+完成上面的案例。
+要求，要有2个具体小品类。
+      要有小品工厂类。
+
+public class 小品Factory{
+
+    public static 小品 get小品(){
+	return new 不差钱();	
+
+    ｝
+}
+--
+接口 (interface)
+定义，接口也是一种数据类型，是一种最特殊的类。
+它使用 interface 关键字来定义，而不是class
+
+语法：
+public interface 接口名{
+   //属性
+   int YEAR = 1; //省略public static final
+   //方法
+   void method1(); //修饰符可以省略
+}
+
+接口的特点：
+1. 接口的属性都是公开静态常量
+2. 接口的方法都是公开抽象方法
+3. 接口没有构造方法
+4. 接口支持多重继承[一个接口可以继承多个接口]
+5. 一个类可以实现多个接口，并实现所有的抽象方法，
+   除非这个类还是一个抽象类。
+
+如：定义一个接口如下：
+public interface IHello {
+   void sayHello(String name);
+}
+
+--
+接口的命名
+a. 以字母 I 打头
+b. 以 able 结尾
+如：java.lang.Comparable
+    java.lang.Cloneable
+    java.lang.Runnable
+    java.io.Serializable
+    ...
+--
+
+例：
+定义一个 可移动的(Movable) 接口如下：
+public interface Movable{
+  
+   int getSpeed(); //获取速度，省略public abstract
+
+   void move(int direction); //移动
+}
+
+//实现类：
+...
+
+--
+接口的实现/继承同样具有传递性。
+
+如：
+public interface IA {
+  void a();
+}
+public interface IB{
+  void b();
+}
+public interface IC extends IA,IB{
+  void c();
+}
+
+public interface ID {
+  void d();
+  void e();
+}
+
+public class ICimpl implements IC{
+  public void c(){ ... }
+  public void a(){ ... }
+  public void b(){ ... }
+
+}
+
+public class IDimpl implements ID,IA{
+  public void a(){ ... }
+  public void e(){ ... }
+  public void d(){ ... }
+}
+//客户端：
+IA a = new IDimpl(); //OK
+ID b = new IDimpl(); //ok
+IC c = new ICimpl(); //ok
+IA d = new ICimpl(); //ok
+
+---
+软件设计的原则
+  1.高内聚, 指的是对象独立完成某个业务的能力
+  2.低耦合, 指的对象之间的依赖程度.
+
+如何做到？
+  接口是关键
+  简单来说，就是要依赖于抽象，而不是具体。
+
+所以，接口和抽象类是做软件设计时最重要的元素.
+
+-- -----------------------------------------
+面向接口/父类 编程
+体现在：
+ a. 变量的编译时类型尽可能地写父类/接口
+ b. 方法的返回类型尽可能地写父类/接口
+ c. 方法的参数尽可能地写父类/接口
+-- ------------------------------------------
+
+案例：
+//不考虑任何设计思想与模式
+public class HelloWorld{
+  public static void main(String[] args){
+	//String name = "Jack";
+	//System.out.println("Hello,"+name);
+
+	//IHello h = new HelloWorld();
+	//h.sayHello("jack");
+
+	//IHello h = new ComplexHello();
+	//h.sayHello("jack");
+
+	IHello h = HelloFactory.getInstance();
+	h.sayHello("老王");
+  }
+}
+-- 改进如下：
+创建一个接口：
+public interface IHello{
+   void sayHello(String name);
+}
+//原来的实现
+public class HelloWorld implements IHello{
+  public void sayHello(String name){
+	System.out.println("Hello,"+name);
+  }
+}
+//重新再写一个实现类
+public class ComplexHello implements IHello{
+  public void sayHello(String name){
+	for(int i=0;i<10;i++){
+		System.out.println("您好,"+name);
+	}
+  }
+}
+
+//为了解耦，提供一个简单工厂
+public class HelloFactory{
+  public static IHello getInstance(){
+	....
+	return new HelloWorld();
+
+	return new ComplexHello();//
+  }
+}
+
+--
+接口 其实是就一种”规范”，也叫 “契约”.
+所以，接口实现者就要 遵守这个 规范。
+--
+
+接口的分类
+1.普通接口
+
+2.标记接口 
+  是指即没有属性也没有方法的接口。
+  主要是用来做一些特殊处理的。
+  如:java.io.Serializable
+  此接口就是一个标记接口，帮助JVM来识别哪些对象
+  可以序列化。
+
+3.常量接口
+  是指只有属性没有方法的接口。
+  现在使用不多，因为，有了 枚举。
+  
+--
+如：
+public interface Checked{
+  
+}
+
+-- -------------------------------------------
+java.lang.Object 类
+它是JAVA类型顶级父类，所有类型都直接或间接继承
+于它。所以，Object中的所有方法，其它类型中都可以
+直接调用。
+
+toString方法
+  作用：把对象转换字符串，以便于输出。
+  但是，在Object类中，此方法的实现只是把对象的
+  内存地址转换成16进制的字符串。
+  
+  所以，如果想自定义输出对象的格式，则需要
+  重写 toString方法。
+
+--
+重写 toString方法的要点：
+就是按你自己想要的格式做字符串与属性值的拼接。
+
+--
+
+
+

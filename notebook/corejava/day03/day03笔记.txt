@@ -1,0 +1,203 @@
+--
+Computer c = new Computer();
+//对象 c 为 null 吗？
+答案： 不是，此处对象c 已经初始化了。
+它不会为null,
+而它的所有属性都没有赋值，所以：
+c.getBrand(); -> null
+c.getDescription(); -> null
+c.getScreen(); --> null
+c.getPrice(); --> 0.0
+
+--
+Computer c2 = null;
+
+--
+Computer c3 = c;
+c3.setPrice(100.2);
+c3.setBrand("ABC");
+//
+c.getPrice(); --> 100.2
+c.getBrand(); --> ABC
+//
+c3 = null;
+//
+c.getPrice(); --> 100.2
+c.getBrand(); --> ABC
+-- --------------------------------------------
+知识大纲：
+1.继承与多态
+	instanceof 运算符
+	回顾 方法重载(overload)
+	方法重写(override)
+	super关键字
+
+--
+类中的方法和属性统称为 成员(members)
+所以，
+方法也叫 成员方法
+属性也叫 成员属性/成员变量
+
+这些成员都是对象所有，一旦某个类实例化了一个对象，
+则，这个对象拥有本类的所有成员。
+所以，成员变量的生命周期与对象同长。
+
+如：
+Computer c1 = new Computer();
+Computer c2 = new Computer();
+
+--
+继承(Inheritance)
+定义，继承是一种类之间的关系，如果A类继承B类，则
+A类是B类的子类/派生类, B类是A类的父类/超类.
+
+继承采用 extends 关键字来描述。
+
+继承的特点：
+1.传递性
+2.继承性, 子类会继承父类所有的非私有成员。
+3.单重性, JAVA的类是单继承，不是多重继承。
+
+语法：
+public class 子类 extends 父类{
+   //类的定义
+}
+
+--
+何时使用继承?
+两个类之间要满足 "IS A" 的关系。
+
+比如： Apple IS A Fruits;
+
+所以：
+public class Fruits{ //水果类
+   //属性
+   //种类，颜色，口感。。。
+
+   //方法
+   生长()
+}
+
+public class Apple extends Fruits{ //苹果类
+   //属性
+   
+   //方法
+
+}
+public class Watermelon extends Fruits{//西瓜类
+   //属性
+
+   //方法
+   去籽();
+}
+
+注：定义父子类时，
+1.共性尽可以抽离出来定义在父类中
+2.个性要定义在子类中
+
+--
+关键字: super
+1.在子类中 调用父类的构造方法.
+  注：
+  必需放在构造方法中的第一条语句。
+
+2.代表 指向父类对象的一个指针。但是，注意，
+  super不能向this 一样，当做对象本身来使用。
+
+--
+有了继承关系后，对象创建的三步典应改为：
+按如下3步，递归地创建父类对象。
+1.申请属性空间
+2.给属性赋默认值 
+3.调用构造方法
+
+--
+动物(Animals) [属性：名称,种类]
+小猫类 "IS A " 动物 [属性]
+小狗类 "IS A " 动物 [属性：是否是宠物]
+
+--
+Object类是所有类的超类。
+任何的类都会直接或间接地继承 java.lang.Object类。
+
+--
+编译时类型
+  是指对象在编译期间的类型，可以是本身的类型
+  也可以是超类的类型。
+  也就是变量的申明时类型【=号左边的】
+
+运行时类型
+  是指对象的真正类型。
+  【=号右边的】
+
+如：
+Animals a1 = new Cat();//ok
+//此时，变量a1的编译时类型是 Animals,
+而运行时类型是 Cat.
+
+
+--
+方法的重写[override]
+前提条件：要有继承关系 【父子类】
+方法的条件：
+1.方法名完全相同
+2.参数列表完全相同
+3.方法的修饰符，子类只能比父类更宽。
+4.方法的返回类型，子类中只能比父类更小。
+5.方法抛出的异常，子类只能比父类更小。
+
+可以通过
+@Override 标记来验证我们的重写方法是否满足以
+上5个条件。
+如果有任何一个条件不满足，则JVM会提示编译错误。
+
+--
+对象的编译时类型决定了此对象能够调用的方法。
+对象的运行时类型决定了多态的行为
+[调用了本身类型的方法]
+
+所以，多态的条件：
+1.要有继承关系
+2.一定要有方法重写
+
+--
+多态的应用：
+1.对象的编译时类型尽可能地写 父类
+  因为可以利用父类类型统一地处理和维护这些对象。
+
+
+--
+instanceof 运算符
+作用，用来判断某个对象是否属于某个类型。
+
+语法：
+对象 instanceof 类型
+
+这个表达式的结果是布尔类型。
+
+如：
+public class SuperA {
+  //...
+}
+public class SubB extends SuperA{
+  //...
+}
+
+SuperA a1 = new SuperA(); //ok
+SuperA a2 = new SubB(); //ok
+SubB a3 = new SuperA(); //ERROR
+SubB a4 = new SubB(); //ok
+
+a1 instanceof SuperA => 结果是：true
+a2 instanceof SuperA => 结果是：true
+a4 instanceof SubB => 结果是：true
+a1 instanceof Object => 结果是：true
+a1 instanceof SubB => 结果是：false
+
+--
+Object类型可以做任意对象的编译时类型. 
+
+
+
+
+

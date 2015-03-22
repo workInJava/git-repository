@@ -1,0 +1,312 @@
+*****高级查询
+查询出员工姓名和员工所在的部门名:
+select first_name,name from s_emp,s_dept;
+
+以上查询因为没有指定表之间的关联关系,所以,产生了笛卡尔积,会造成资源的浪费
+只有指定了合理的关联关系,才会避免笛卡尔积:
+select first_name,name from s_emp,s_dept
+where s_emp.dept_id = s_dept.id;
+
+select e.first_name,d.name from s_emp e,s_dept d
+where e.dept_id = d.id;(传统的写法)
+
+//表的别名使用
+select e.first_name,e.salary from s_emp e;
+
+select e.first_name,d.name from s_emp e,s_dept d
+where e.dept_id = d.id;(传统的写法)
+改为现代写法:
+select e.first_name,d.name from s_emp e join
+s_dept d on e.dept_id = d.id;
+
+--查询出部门名和所在的区域名:
+select d.name,r.name from s_dept d join s_region
+r on d.region_id = r.id;
+
+
+练习:
+--查询出Sales 部门的所有员工及工资;
+select e.first_name,e.salary,d.name from s_emp e
+join s_dept d on e.dept_id = d.id where d.name = 'Sales';
+--查询出设在Asia的部门名;
+select d.name,r.name from s_dept d
+join s_region r on d.region_id = r.id where r.name = 'Asia';
+--查询出名叫Unisports的客户的订单信息;
+select c.name,o.* from s_customer c 
+join s_ord o on c.id = o.customer_id where c.name = 'Unisports';
+--查询出在Asia工作的员工名,工资,职称;
+select e.first_name,e.salary,e.title,r.name from s_emp e
+join s_dept d on e.dept_id = d.id
+join s_region r on d.region_id = r.id
+where r.name = 'Asia';
+
+--查询出客户名及他的订单号.总费用;
+select c.name,o.id,o.total from s_customer c
+left join s_ord o on c.id= o.customer_id order by c.name;
+
+关联查询分2类:
+1.内联:
+	[inner] join on
+2.外联:
+   左外联:left [outer] join on
+	以关联条件的(join)左边为基准,即使右边没有与之对应
+	的记录,左边的列也会出现,右边以null值填充,
+   右外联:right [outer] join on
+
+select c.name,o.id,o.total from s_ord o
+right join s_customer c on c.id= o.customer_id order by c.name;
+
+
+
+自关联:
+查询员工名和他的上司名:
+select e.first_name "员工名",e1.first_name "上司名"
+from s_emp e left join s_emp e1 on e.manager_id = e1.id;
+
+---------------------------------------------------------
+分组查询:
+分组查询,就是查看数据的方式:
+
+oracle数据可提供了相应的的组函数来支持分组
+查询:
+sum(列名) --求和
+count(列名) -- 统计记录条数
+avg(列名) --求平均值
+max(列名) --求最大值
+min(列名) --求最小值
+
+注:组函数也成为多行函数,与单行函数不同的是
+它可以处理多个数据:
+
+--查询出本公司最高工资,最低工资,平均工资,工资总和
+select max(salary),min(salary),avg(salary),sum(salary) from s_emp;
+
+分组查询标志 group by 列名  having 字句
+
+--查询出各个部门的最高,最低,平均,工资总和;
+select dept_id,max(salary),min(salary)
+,avg(salary),sum(salary) from s_emp
+group by dept_id order by avg(salary);
+
+注:只有作为分组的列,才能出现在select后面,
+除非它使用了组函数来修饰:
+
+查询本公司的员工数:
+select count(id) from s_emp;
+
+统计本公司员工的职称数:
+select count(distinct title) from s_emp;
+
+查出41部门的最高工资与最低工资:
+select max(salary),min(salary) from s_emp
+where dept_id = 41;
+
+查询出各个区域名及设在此区域的部门的数量:
+select r.name,count(d.id) from s_region r
+left join s_dept d on d.region_id = r.id group by r.name;
+
+--查询出客户名及客户的订单数:
+select c.name,count(o.id) from s_ord o
+right join s_customer c on o.customer_id = c.id
+group by c.name;
+
+--查询出客户名及客户的订单数且订单数超过一个:
+select c.name,count(o.id) from s_ord o
+right join s_customer c on o.customer_id = c.id
+group by c.name having count(o.id) > 1;
+
+where 和 having 的区别:
+where是条件过滤:是在分组之前的多虑,不能使用组函数;
+having是在分组之后进一步过滤,可以使用组函数.
+
+分组查询:
+select [distinct] 列名,组函数(其他列名)
+from table_name [join on 子句]
+where 子句
+group by 列名 
+having 子句
+order by 列名;
+
+--查询出平均工资超过1300的部门编号:
+select e.dept_id,avg(e.salary) from s_emp e
+group by e.dept_id having avg(e.salary) > 1300;
+----------------------------------------------
+子查询(subquery):
+定义:查询中嵌套查询 就是子查询:
+
+--找出与Ben同部门的员工:
+马克思主义思想:先找出Ben的部门编号,再找此部门编号里的员工
+
+select first_name from s_emp where dept_id = 
+(
+select dept_id from s_emp where first_name = 'Ben'
+)
+and first_name <>'Ben';
+
+子查询的分类:
+1.无关子查询:
+	指子查询里面没有使用外部查询的列,
+	也就是说子查询与外部查询没有关联点:
+	特点:可以独立运行;
+2.相关子查询:
+	指子查询里面使用了外部查询的列,
+	特点:不能独立运行:
+
+
+虚拟列子查询:
+--查询出客户名,电话号码 及客户的订单数:
+select c.name,c.phone,(
+	select count(o.id) from s_ord o where o.customer_id = c.id 
+) from s_customer c;
+
+
+
+*无关子查询是如何运行的:
+先运行内部查询,然后将内部查询的结果返回给外部查询
+做为外部查询的条件;
+
+
+
+
+找出工资高于其部门平均工资的员工;
+select e.first_name,e.salary from s_emp e
+where e.salary > 
+(
+select avg(e1.salary) from s_emp e1
+where e1.dept_id = e.dept_id
+);
+
+*相关子查询是如何运行的:
+如果此查询的相关子查询,则次查询会读取表的第一行数据
+作为候选行,将此查询有用的一列值传到内部查询中
+作为内部查询的一个条件,做查询,得出的值跟外部的
+条件进行比较,在确定此行是否会被过滤掉;再读取第二
+行做重复操作;
+第一步:
+select e.first_name,e.salary from s_emp e
+where e.salary > 
+(
+select avg(e1.salary) from s_emp e1
+where e1.dept_id = 1
+);
+第二步:
+select e.first_name,e.salary from s_emp e
+where e.salary > 
+(
+select avg(e1.salary) from s_emp e1
+where e1.dept_id = 1
+);
+第三步:
+select e.first_name,e.salary from s_emp e
+where e.salary > 
+(
+select avg(e1.salary) from s_emp e1
+where e1.dept_id = 2
+);
+因此:相关子查询效率低下;
+
+
+--找出平均工资大于公司平均工资的部门;
+select e.dept_id,avg(e.salary) from s_emp e
+group by e.dept_id having avg(e.salary) > 
+(select avg(salary) from s_emp);
+
+--查询出客户名,电话号码 及客户的订单数(大于1):
+
+
+内联视图:
+select c1.name,c1.phone,core_.oCount from s_customer c1 
+join
+(select c.id id,count(o.id) oCount from s_customer c
+join s_ord o  on c.id= o.customer_id group by
+c.id having count(o.id) > 1)core_
+on c1.id = core_.id;
+马哲思路:内联的视图要考虑构建与
+		外部查询能做关联查询的列
+
+伪列(rownum):
+永远从1开始,一次递增:从不产生间隔;
+
+select rownum,e.* from s_emp e ;
+select rownum,e.* from s_emp e where rownum = 5;
+select rownum,e.* from s_emp e where rownum <= 5;
+select rownum,e.* from s_emp e where rownum >= 5;
+
+子查询的运用:
+top-N问题
+解题思路:
+1.肯定是利用子查询,先排序,后过滤
+2.利用rownum的特性来取前几行记录:
+
+--查询出工资排名前三的员工;
+select * from (
+select e.first_name,e.salary from s_emp e order by e.salary desc
+) where rownum <=3;
+
+
+<-------------------------到此------------------------------>
+2.分页:
+select * from
+(
+select rownum row_,e.* from s_emp e where rownum <= 10
+) where  row_ >=6;
+
+通用的分页语句:
+select * from
+(
+	select rownum row_,core_.* from
+	(
+	select * from s_emp [where子句 ] .... ---内核
+	)core_ where rownum <= 10
+)outer_ where outer_.row_ >= 6
+
+针对子查询的交\并集操作:
+minus  求两个子查询的"相减"效果
+intersect  求两个子查询的交集
+union	并集:去除重复的
+union all 并集: 保留重复的
+
+select first_name from s_emp where salary between 1300 and 1800
+minus
+select first_name from s_emp where salary > 1500;
+
+----
+exists 和 not exists
+
+--找出与Ben同部门的员工:
+马克思主义思想:先找出Ben的部门编号,再找此部门编号里的员工
+
+select first_name from s_emp where dept_id = 
+(
+select dept_id from s_emp where first_name = 'Ben'
+)
+and first_name <>'Ben';
+
+使用exists
+select e.first_name from s_emp e
+where exists
+(	select * from s_emp e1 
+	where e1.first_name = 'Ben' 
+	and e1.dept_id = e.dept_id
+);
+
+外查询站在你的角度取考虑
+找出相同职称的人;
+select e.first_name,e.title from s_emp e
+where exists(
+	select * from s_emp e1 where e1.title = e.title
+	having count(*) >=2
+);
+
+找出各个部门工资排名前二的员工;
+思路: 本部门比 ""我 工资高的人不超过1个;
+select e.dept_id,e.first_name,e.salary from s_emp e
+where exists(
+	select * from s_emp e1 where e1.dept_id = e.dept_id
+	and e.salary < e1.salary having count(*) <=1
+)order by e.dept_id;
+
+
+
+
+
