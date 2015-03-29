@@ -7,5 +7,7 @@ public class FactoryTest {
 		 SendFactory factory = new SendFactory();
 		 ISender s = factory.produce("sms");
 		 s.send();
+		 ISender sa = factory.produce("eee");
+		 sa.send();
 	}
 }
