@@ -2,8 +2,6 @@ package com.Design.pattern.singleton;
 
 import java.util.Vector;
 
-import sun.org.mozilla.javascript.internal.Synchronizer;
-
 public class ShadowSingleton {
 
 	private static ShadowSingleton instance = null;
