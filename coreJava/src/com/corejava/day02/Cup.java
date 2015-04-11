@@ -1,5 +1,6 @@
 package com.corejava.day02;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /********************
@@ -13,8 +14,12 @@ import java.util.Date;
  * @文件名   Cup.java
  *
  */
-public class Cup {
+public class Cup implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	//属性
 	private double price; //单价
 	private String color; //颜色
