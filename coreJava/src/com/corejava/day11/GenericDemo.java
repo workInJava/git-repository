@@ -1,15 +1,21 @@
 package com.corejava.day11;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 //·ºÐÍ°¸Àý
 public class GenericDemo {
 
 	public static void main(String[] args) {
+		Set<String> set = new HashSet<String>();
+		System.out.println(set.add("2"));
+		System.out.println(set.add("2"));
+		
 		List<Integer> intList = new ArrayList<Integer>();
-		intList.add(10);
+		intList.add(10);  
 		intList.add(100);
 		intList.add(1000);
 		intList.add(10000);
